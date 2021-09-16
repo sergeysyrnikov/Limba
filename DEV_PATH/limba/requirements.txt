@@ -1,0 +1,12 @@
+django
+psycopg2-binary
+gunicorn
+gevent
+djangorestframework
+django-filter
+django-cors-headers
+djoser
+celery==5.0.5
+redis
+Pillow
+

@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+    nginx:
+# при падении будет стараться подняться
+        restart: always
+# только свежий nginx
+        image: nginx:latest
+# слушает порт 8080
+        expose:
+          - 8080
+# мапаем порт 80 на его 8080. Тогда сайт будет доступен по адресу localhost. Убедись, что порт у тебя не занят.
+        ports:
+          - "80:8080"
+# монтируем только те директории, в которых лежит статика, т.к. nginx с динамикой не будет работать. Также директорию с логами и файл настройки, который мы подготовили.
+        volumes:
+            - ./limba/static:/srv/www/limba/static
+            - ./limba/media:/srv/www/limba/media
+            - ./limba/logs:/srv/www/limba/logs
+            - ./docker/nginx:/etc/nginx/conf.d
+# и nginx зависит от контейнера python. Т.е. python должен быть запущен первым
+        depends_on:
+            - web
+    web:
+        restart: always
+# указываем откуда собирать образ
+        build:
+            context: .
+            dockerfile: docker/web/Dockerfile
+# монтируем директорию проекта
+        volumes:
+            - ./limba:/srv/www/limba
+        expose:
+          - 8000
+        ports:
+            - 8001:8000
+# запускаем gunicorn
+        command: "gunicorn -c gunicorn.py limba.wsgi"
+        env_file:
+            - ./.env.dev
+    db:
+# Ниже даже расписывать не хочу, насколько все просто: логин, пароль, БД, порты и т.д.
+        image: postgres:12-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_DB=upload
+            - POSTGRES_USER=sergey
+            - POSTGRES_PASSWORD=34ubitav
+# хранилища
+volumes:
+    postgres_data:
+        
