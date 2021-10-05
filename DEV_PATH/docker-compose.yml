@@ -40,6 +40,7 @@ services:
             - ./.env.dev
     db:
 # Ниже даже расписывать не хочу, насколько все просто: логин, пароль, БД, порты и т.д.
+        restart: always
         image: postgres:12-alpine
         volumes:
             - postgres_data:/var/lib/postgresql/data/
