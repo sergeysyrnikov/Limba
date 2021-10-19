@@ -66,7 +66,7 @@ class Object(models.Model):
     date_finished = models.DateField(_('Дата сдачи объекта'), null=True, blank=True)
     date_start_document = models.DateField(_('Дата создания ТУ Электоснабжение'), null=True, blank=True)
     date_finished_document = models.DateField(_('Дата окончания ТУ Электоснабжение'), null=True, blank=True)
-    connected_workers = models.ManyToManyField(User, related_name='workers_object')
+    connected_workers = models.ManyToManyField(User, related_name='workers_object', blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -119,7 +119,7 @@ class MainTask(models.Model):
     subdepartment_object = models.ForeignKey(SubDepartmentObject, related_name='department_object', on_delete=models.CASCADE, null=True)
     creator_task = models.ForeignKey(User, related_name='creator_task', on_delete=models.DO_NOTHING, null=True)
     cols_subtasks = models.IntegerField(_('Колличество подзадач'), null=True, default=0)
-    connected_workers = models.ManyToManyField(User, related_name='workers_main')
+    connected_workers = models.ManyToManyField(User, related_name='workers_main', blank=True)
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
@@ -141,7 +141,7 @@ class SubTask(models.Model):
         db_table = 'subtasks'
 
     maintask = models.ForeignKey(MainTask, related_name='maintask', on_delete=models.CASCADE, null=True)
-    connected_workers = models.ManyToManyField(User, related_name='workers_sub')
+    connected_workers = models.ManyToManyField(User, related_name='workers_sub', blank=True)
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)

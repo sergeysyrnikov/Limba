@@ -36,7 +36,7 @@ class UserInfoAdmin(admin.ModelAdmin):
     """Class UserInfoAdmin"""
 
     list_display = [f.name for f in UserAdditionalInfo._meta.fields]
-    list_filter = [f.name for f in UserAdditionalInfo._meta.fields]
+    list_filter = ["id", "abbreviation", "position_worker", "type_user", "datetime", "user"]
 
 """Class Object admin"""  
 

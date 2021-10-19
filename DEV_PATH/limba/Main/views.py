@@ -59,7 +59,7 @@ class UserView(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    pagination_class = PaginationUsers
+    # pagination_class = PaginationUsers
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -71,7 +71,7 @@ class UserInfoView(ModelViewSet):
     serializer_class = UserInfoSerialiser
     filter_backends = (DjangoFilterBackend, )
     filter_class = UserFilter
-    pagination_class = PaginationUsersInfo
+    # pagination_class = PaginationUsersInfo
 
 class ObjectView(ModelViewSet):
     """Class ObjectView"""
@@ -80,7 +80,7 @@ class ObjectView(ModelViewSet):
     serializer_class = ObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectFilter
-    pagination_class = PaginationObjects
+    # pagination_class = PaginationObjects
 
 class DepartmentView(ModelViewSet):
     """Class DepartmentView"""
@@ -89,7 +89,7 @@ class DepartmentView(ModelViewSet):
     serializer_class = DepartmentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = DepartmentFilter
-    pagination_class = PaginationDepartments
+    # pagination_class = PaginationDepartments
 
 class SubDepartmentObjectView(ModelViewSet):
     """Class SubDepartmentView"""
@@ -98,7 +98,7 @@ class SubDepartmentObjectView(ModelViewSet):
     serializer_class = SubDepartmentObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubDepartmentFilter
-    pagination_class = PaginationSubDepartments
+    # pagination_class = PaginationSubDepartments
 
 class MainTaskView(ModelViewSet):
     """Class MainTaskView"""
@@ -107,7 +107,7 @@ class MainTaskView(ModelViewSet):
     serializer_class = MainTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = TaskFilter
-    pagination_class = PaginationMainTasks
+    # pagination_class = PaginationMainTasks
 
 class SubTaskView(ModelViewSet):
     """Class SubTaskView"""
@@ -116,7 +116,7 @@ class SubTaskView(ModelViewSet):
     serializer_class = SubTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskFilter
-    pagination_class = PaginationSubTasks
+    # pagination_class = PaginationSubTasks
 
 class MainTaskCommentView(ModelViewSet):
     """Class MainTaskCommentView"""
@@ -125,7 +125,7 @@ class MainTaskCommentView(ModelViewSet):
     serializer_class = MainTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MainTaskCommentFilter
-    pagination_class = PaginationMainTaskComments
+    # pagination_class = PaginationMainTaskComments
 
 class SubTaskCommentView(ModelViewSet):
     """Class SubTaskCommentView"""
@@ -134,7 +134,7 @@ class SubTaskCommentView(ModelViewSet):
     serializer_class = SubTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskCommentFilter
-    pagination_class = PaginationSubTaskComments
+    # pagination_class = PaginationSubTaskComments
 
 class ImageMainView(ModelViewSet):
     """Class ImageMainView"""
@@ -143,7 +143,7 @@ class ImageMainView(ModelViewSet):
     serializer_class = ImageMainSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MainTaskImageFilter
-    pagination_class = PaginationMainTaskImgs
+    # pagination_class = PaginationMainTaskImgs
 
 class ImageSubTaskView(ModelViewSet):
     """Class ImageSubTaskView"""
@@ -152,7 +152,7 @@ class ImageSubTaskView(ModelViewSet):
     serializer_class = ImageSubTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskImageFilter
-    pagination_class = PaginationSubTaskComments
+    # pagination_class = PaginationSubTaskComments
 
 
     # action_to_serializer = {
