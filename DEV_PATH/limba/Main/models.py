@@ -9,12 +9,12 @@ from django.contrib.auth.models import User
 """Path uploading main imgs"""
 
 def upload_path_main(self, filename):
-    return '/'.join(['imageMainTask',str(self.task.task_name), filename])
+    return '/'.join(['imageMainTask', str(self.task.full_link).replace(" ", "").replace("|", "/"), str(self.task.task_name), filename])
 
 """Path uploading sub imgs"""
 
 def upload_path_sub(self, filename):
-    return '/'.join(['imageSubTask',str(self.subtask.task_name), filename])
+    return '/'.join(['imageSubTask', str(self.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.subtask.task_name), filename])
 
 """Object model Limba"""
 

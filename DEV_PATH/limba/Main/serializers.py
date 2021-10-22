@@ -7,6 +7,7 @@ import datetime as dt
 import json
 from rest_framework import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from urllib.parse import unquote
 from .models import (
     SubTaskComment, 
     SubTask, 
@@ -29,6 +30,15 @@ class ImageMainSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageMain
         fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'image': self.context['request'].build_absolute_uri(instance.image.url),
+            'image_url': unquote(instance.image.url),
+            'task': instance.task.id,
+            'datetime': instance.datetime
+        }
 
 class ImageSubTaskSerializer(serializers.ModelSerializer):
     """Class ImageSubTask Serializer"""
@@ -36,6 +46,16 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageSubTask
         fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'image': self.context['request'].build_absolute_uri(instance.image.url),
+            'image_url': unquote(instance.image.url),
+            'subtask': instance.task.id,
+            'datetime': instance.datetime
+        }
+    
 
 class UserSerializer(serializers.ModelSerializer):
     
