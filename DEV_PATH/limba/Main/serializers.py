@@ -34,11 +34,12 @@ class ImageMainSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'image': self.context['request'].build_absolute_uri(instance.image.url),
             'image_url': unquote(instance.image.url),
             'task': instance.task.id,
             'datetime': instance.datetime
         }
+    
+    # 'image': self.context['request'].build_absolute_uri(instance.image.url),
 
 class ImageSubTaskSerializer(serializers.ModelSerializer):
     """Class ImageSubTask Serializer"""
@@ -50,11 +51,12 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'image': self.context['request'].build_absolute_uri(instance.image.url),
             'image_url': unquote(instance.image.url),
             'subtask': instance.task.id,
             'datetime': instance.datetime
         }
+    
+    # 'image': self.context['request'].build_absolute_uri(instance.image.url),
     
 
 class UserSerializer(serializers.ModelSerializer):
