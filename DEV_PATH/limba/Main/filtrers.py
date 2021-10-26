@@ -1,5 +1,6 @@
 from django.db.models import fields
 from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
+from .models import ImageMain
 from .models import (
     Object, 
     Department, 
@@ -85,16 +86,20 @@ class MainTaskImageFilter(rest_filters.FilterSet):
 
     id = NumberFilter(field_name="id")
     task_id = NumberFilter(field_name="task_id")
+    image = CharFilter(lookup_expr='iexact')
+
 
     class Meta:
         model = ImageMain
         fields = ['id', 'task_id']
+
 
 class SubTaskImageFilter(rest_filters.FilterSet):
     """Class SubTaskImageFilter"""
 
     id = NumberFilter(field_name="id")
     subtask_id = NumberFilter(field_name="subtask_id")
+    image = CharFilter(lookup_expr='iexact')
 
     class Meta:
         model = ImageSubTask
