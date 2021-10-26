@@ -27,6 +27,8 @@ UserModel = get_user_model()
 class ImageMainSerializer(serializers.ModelSerializer):
     """Class ImageMain Serializer"""
 
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+
     class Meta:
         model = ImageMain
         fields = '__all__'
@@ -43,6 +45,8 @@ class ImageMainSerializer(serializers.ModelSerializer):
 
 class ImageSubTaskSerializer(serializers.ModelSerializer):
     """Class ImageSubTask Serializer"""
+    
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = ImageSubTask
@@ -136,6 +140,7 @@ class MainTaskSerializer(serializers.ModelSerializer):
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     maintask_img = ImageMainSerializer(many = True, read_only=True)
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = MainTask
@@ -147,6 +152,7 @@ class SubTaskSerializer(serializers.ModelSerializer):
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = SubTask

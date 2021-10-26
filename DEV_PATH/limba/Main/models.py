@@ -4,7 +4,35 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+import os
+from os.path import join
+import shutil
+import glob
 # from .managers import CustomUserManager
+
+def path_folder(path_abs):
+    index = 0
+    for i,el in enumerate(path_abs):
+        if el == '/':
+            index = i
+    if index > 0:
+        return path_abs[0:index]
+    else:
+        return ''
+
+"""Function delete file"""
+
+def _delete_file(path):
+   """ Deletes file from filesystem. """
+   if os.path.isfile(path):
+       os.remove(path)
+   path_f = path_folder(path)
+   lst = glob.glob(join(path_f,'*.jpg'))
+   if (len(lst) == 0):
+       lst = glob.glob(join(path_f,'*.png'))
+   if len(lst) == 0 and os.path.exists(path_f):
+       shutil.rmtree(path_f)
 
 """Path uploading main imgs"""
 
@@ -218,4 +246,12 @@ class SubTaskComment(models.Model):
     def __str__(self):
         return f"Подзадача: {self.subtask}, Дата создания {self.datetime}, Путь файлов: {self.image}"
 
+@receiver(models.signals.post_delete, sender=ImageMain)
+def delete_file(sender, instance, *args, **kwargs):
+    if instance.image:
+        _delete_file(instance.image.path)
 
+@receiver(models.signals.post_delete, sender=ImageSubTask)
+def delete_file(sender, instance, *args, **kwargs):
+    if instance.image:
+        _delete_file(instance.image.path)
