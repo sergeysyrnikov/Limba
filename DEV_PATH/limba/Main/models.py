@@ -9,6 +9,7 @@ import os
 from os.path import join
 import shutil
 import glob
+from PIL import Image
 # from .managers import CustomUserManager
 
 def path_folder(path_abs):
@@ -196,6 +197,22 @@ class ImageMain(models.Model):
     
     def __str__(self):
         return f"Id: {self.id}, Image: {self.image}"
+    
+    def save(self, *args, **kwargs):
+        super().save()
+        image_new= Image.open(self.image.path)
+        width = float(image_new.size[0])
+        height = float(image_new.size[1])
+    #    print('Width: ' + str(width))
+        if (width < 600):
+            image_new.save(self.image.path)
+        else:
+            if (width > 1920):
+                new_width = 1920
+                new_height = int(new_width*height/width)
+            #    print(new_height)
+                image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
+            image_new.save(self.image.path, quality=25, optimize=True)
 
 """SubImage model Limba"""
 
@@ -208,6 +225,22 @@ class ImageSubTask(models.Model):
     subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
+    
+    def save(self, *args, **kwargs):
+        super().save()
+        image_new= Image.open(self.image.path)
+        width = float(image_new.size[0])
+        height = float(image_new.size[1])
+    #    print('Width: ' + str(width))
+        if (width < 600):
+            image_new.save(self.image.path)
+        else:
+            if (width > 1920):
+                new_width = 1920
+                new_height = int(new_width*height/width)
+            #    print(new_height)
+                image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
+            image_new.save(self.image.path, quality=25, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImage: {self.image}"
@@ -247,11 +280,11 @@ class SubTaskComment(models.Model):
         return f"Подзадача: {self.subtask}, Дата создания {self.datetime}, Путь файлов: {self.image}"
 
 @receiver(models.signals.post_delete, sender=ImageMain)
-def delete_file(sender, instance, *args, **kwargs):
+def post_delete_image_main(sender, instance, *args, **kwargs):
     if instance.image:
         _delete_file(instance.image.path)
 
 @receiver(models.signals.post_delete, sender=ImageSubTask)
-def delete_file(sender, instance, *args, **kwargs):
+def post_delete_image_sub(sender, instance, *args, **kwargs):
     if instance.image:
         _delete_file(instance.image.path)
