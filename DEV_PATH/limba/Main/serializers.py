@@ -19,15 +19,15 @@ from .models import (
     SubDepartmentObject, 
     Object, 
     User,
-    UserAdditionalInfo
+    UserAdditionalInfo,
+    ImageMainTaskComment,
+    ImageSubTaskComment
 )
 
 UserModel = get_user_model()
 
 class ImageMainSerializer(serializers.ModelSerializer):
     """Class ImageMain Serializer"""
-
-    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = ImageMain
@@ -40,13 +40,9 @@ class ImageMainSerializer(serializers.ModelSerializer):
             'task': instance.task.id,
             'datetime': instance.datetime
         }
-    
-    # 'image': self.context['request'].build_absolute_uri(instance.image.url),
 
 class ImageSubTaskSerializer(serializers.ModelSerializer):
     """Class ImageSubTask Serializer"""
-    
-    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = ImageSubTask
@@ -59,9 +55,40 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
             'subtask': instance.task.id,
             'datetime': instance.datetime
         }
+
+class ImageMainTaskCommentSerializer(serializers.ModelSerializer):
+    """Class ImageMainTaskComment Serializer"""
+
+    maintask_img_com = ImageMainTaskComment(many = True, read_only=True)
+
+    class Meta:
+        model = ImageMainTaskComment
+        fields = "__all__"
     
-    # 'image': self.context['request'].build_absolute_uri(instance.image.url),
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'image_url': unquote(instance.image.url),
+            'comment_maintask': instance.comment_maintask.id,
+            'datetime': instance.datetime
+        }
+
+class ImageSubTaskCommentSerializer(serializers.ModelSerializer):
+    """Class ImageSubTaskComment Serializer"""
+
+    subtask_img_com = ImageSubTaskComment(many = True, read_only=True)
+
+    class Meta:
+        model = ImageSubTaskComment
+        fields = "__all__"
     
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'image_url': unquote(instance.image.url),
+            'comment_subtask': instance.comment_subtask.id,
+            'datetime': instance.datetime
+        }
 
 class UserSerializer(serializers.ModelSerializer):
     
@@ -140,7 +167,7 @@ class MainTaskSerializer(serializers.ModelSerializer):
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     maintask_img = ImageMainSerializer(many = True, read_only=True)
-    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+    # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = MainTask
@@ -152,7 +179,7 @@ class SubTaskSerializer(serializers.ModelSerializer):
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
-    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+    # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = SubTask
@@ -162,6 +189,7 @@ class MainTaskCommentSerializer(serializers.ModelSerializer):
     """Class MainTaskComment Serializer"""
 
     creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    maintask_img_com = ImageMainTaskComment(many = True, read_only=True)
 
     class Meta:
         model = MainTaskComment
@@ -171,6 +199,7 @@ class SubTaskCommentSerializer(serializers.ModelSerializer):
     """Class SubTaskComment Serializer"""
 
     creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    subtask_img_com = ImageSubTaskComment(many = True, read_only=True)
 
     class Meta:
         model = SubTaskComment
