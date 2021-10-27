@@ -12,9 +12,13 @@ from .models import (
     SubDepartmentObject, 
     Object, 
     User,
-    UserAdditionalInfo
+    UserAdditionalInfo,
+    ImageMainTaskComment,
+    ImageSubTaskComment
 )
 from .filtrers import (
+    MainTaskCommentImageFilter,
+    SubTaskCommentImageFilter,
     ObjectFilter, 
     DepartmentFilter, 
     SubDepartmentFilter, 
@@ -51,7 +55,9 @@ from .serializers import (
     ImageMainSerializer,
     ImageSubTaskSerializer,
     UserInfoSerialiser,
-    MyTokenObtainPairSerializer
+    MyTokenObtainPairSerializer,
+    ImageMainTaskCommentSerializer,
+    ImageSubTaskCommentSerializer
 )
 
 class UserView(ModelViewSet):
@@ -152,6 +158,24 @@ class ImageSubTaskView(ModelViewSet):
     serializer_class = ImageSubTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskImageFilter
+    # pagination_class = PaginationSubTaskComments
+
+class ImageMainTaskCommentView(ModelViewSet):
+    """Class ImageMainTaskCommentView"""
+
+    queryset = ImageMainTaskComment.objects.all()
+    serializer_class = ImageMainTaskCommentSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = MainTaskCommentImageFilter
+    # pagination_class = PaginationSubTaskComments
+
+class ImageSubTaskCommentView(ModelViewSet):
+    """Class ImageSubTaskCommentView"""
+
+    queryset = ImageSubTaskComment.objects.all()
+    serializer_class = ImageSubTaskCommentSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = SubTaskCommentImageFilter
     # pagination_class = PaginationSubTaskComments
 
 

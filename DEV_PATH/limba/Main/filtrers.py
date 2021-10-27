@@ -11,7 +11,9 @@ from .models import (
     SubTaskComment, 
     ImageMain, 
     ImageSubTask,
-    UserAdditionalInfo
+    UserAdditionalInfo,
+    ImageMainTaskComment,
+    ImageSubTaskComment
 )
 
 class UserFilter(rest_filters.FilterSet):
@@ -93,7 +95,6 @@ class MainTaskImageFilter(rest_filters.FilterSet):
         model = ImageMain
         fields = ['id', 'task_id']
 
-
 class SubTaskImageFilter(rest_filters.FilterSet):
     """Class SubTaskImageFilter"""
 
@@ -124,3 +125,27 @@ class SubTaskCommentFilter(rest_filters.FilterSet):
     class Meta:
         model = SubTaskComment
         fields = ['id', 'subtask_id']
+
+class MainTaskCommentImageFilter(rest_filters.FilterSet):
+    """Class MainTaskCommentImageFilter"""
+
+    id = NumberFilter(field_name="id")
+    comment_maintask_id = NumberFilter(field_name="comment_maintask_id")
+    image = CharFilter(lookup_expr='iexact')
+
+
+    class Meta:
+        model = ImageMainTaskComment
+        fields = ['id', 'comment_maintask_id']
+
+class SubTaskCommentImageFilter(rest_filters.FilterSet):
+    """Class SubTaskCommentImageFilter"""
+
+    id = NumberFilter(field_name="id")
+    comment_subtask_id = NumberFilter(field_name="comment_subtask_id")
+    image = CharFilter(lookup_expr='iexact')
+
+
+    class Meta:
+        model = ImageSubTaskComment
+        fields = ['id', 'comment_subtask_id']

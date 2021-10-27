@@ -13,6 +13,8 @@ from .views import (
     ImageMainView,
     ImageSubTaskView,
     UserInfoView,
+    ImageMainTaskCommentView,
+    ImageSubTaskCommentView,
     MyTokenObtainPairView
 )
 
@@ -28,6 +30,8 @@ router.register('maintask-comments', MainTaskCommentView)
 router.register('subtask-comments', SubTaskCommentView)
 router.register('maintask-images', ImageMainView)
 router.register('subtask-images', ImageSubTaskView)
+router.register('maintask-comment-images', ImageMainTaskCommentView)
+router.register('subtask-comment-images', ImageSubTaskCommentView)
 
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),

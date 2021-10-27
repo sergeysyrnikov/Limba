@@ -59,8 +59,6 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
 class ImageMainTaskCommentSerializer(serializers.ModelSerializer):
     """Class ImageMainTaskComment Serializer"""
 
-    maintask_img_com = ImageMainTaskComment(many = True, read_only=True)
-
     class Meta:
         model = ImageMainTaskComment
         fields = "__all__"
@@ -75,8 +73,6 @@ class ImageMainTaskCommentSerializer(serializers.ModelSerializer):
 
 class ImageSubTaskCommentSerializer(serializers.ModelSerializer):
     """Class ImageSubTaskComment Serializer"""
-
-    subtask_img_com = ImageSubTaskComment(many = True, read_only=True)
 
     class Meta:
         model = ImageSubTaskComment
@@ -189,7 +185,7 @@ class MainTaskCommentSerializer(serializers.ModelSerializer):
     """Class MainTaskComment Serializer"""
 
     creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-    maintask_img_com = ImageMainTaskComment(many = True, read_only=True)
+    mainimage_comment = ImageMainTaskCommentSerializer(many = True, read_only=True)
 
     class Meta:
         model = MainTaskComment
@@ -199,7 +195,7 @@ class SubTaskCommentSerializer(serializers.ModelSerializer):
     """Class SubTaskComment Serializer"""
 
     creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-    subtask_img_com = ImageSubTaskComment(many = True, read_only=True)
+    subimage_comment = ImageSubTaskCommentSerializer(many = True, read_only=True)
 
     class Meta:
         model = SubTaskComment

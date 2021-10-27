@@ -12,7 +12,9 @@ from .models import (
     SubTask, 
     SubTaskComment, 
     User,
-    UserAdditionalInfo
+    UserAdditionalInfo,
+    ImageMainTaskComment,
+    ImageSubTaskComment
 )
 
 # """Class User admin"""    
@@ -100,6 +102,24 @@ class ImageSubTask(admin.ModelAdmin):
 
     list_display = [f.name for f in ImageSubTask._meta.fields]
     list_filter = [f.name for f in ImageSubTask._meta.fields]
+
+"""Class ImageMainTaskComment admin"""    
+
+@admin.register(ImageMainTaskComment)
+class ImageMainTaskComment(admin.ModelAdmin):
+    """Class ImageMainTaskComment"""
+
+    list_display = [f.name for f in ImageMainTaskComment._meta.fields]
+    list_filter = [f.name for f in ImageMainTaskComment._meta.fields]
+
+"""Class ImageSubTaskComment admin"""    
+
+@admin.register(ImageSubTaskComment)
+class ImageSubTaskComment(admin.ModelAdmin):
+    """Class ImageSubTaskComment"""
+
+    list_display = [f.name for f in ImageSubTaskComment._meta.fields]
+    list_filter = [f.name for f in ImageSubTaskComment._meta.fields]
 
 """Class MainTaskComment admin"""    
 

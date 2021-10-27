@@ -45,6 +45,22 @@ def upload_path_main(self, filename):
 def upload_path_sub(self, filename):
     return '/'.join(['imageSubTask', str(self.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.subtask.task_name), filename])
 
+"""Path uploading main comment"""
+
+def upload_path_main_comment(self, filename):
+    last_index = len(self.comment_maintask.comment)
+    if (last_index > 10):
+        last_index = 10
+    return '/'.join(['imageMainTask', str(self.comment_maintask.task.full_link).replace(" ", "").replace("|", "/"), str(self.comment_maintask.task.task_name), 'Комментарий #' + str(self.comment_maintask.id) + '(' + self.comment_maintask.comment[0:last_index] + ')', filename])
+
+"""Path uploading sub comment"""
+
+def upload_path_sub_comment(self, filename):
+    last_index = len(self.comment_subtask.comment)
+    if (last_index > 10):
+        last_index = 10
+    return '/'.join(['imageSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
+
 """Object model Limba"""
 
 class User(AbstractUser):
@@ -256,11 +272,10 @@ class MainTaskComment(models.Model):
     task = models.ForeignKey(MainTask, related_name='maintask_comment', on_delete=models.CASCADE, null=True)
     creator_comment = models.ForeignKey(User, related_name='creator_maincomment', on_delete=models.DO_NOTHING, null=True)
     comment = models.TextField(_('Комментарий'), max_length=100, default="")
-    # image = models.ImageField(_('Фотография'), upload_to = upload_path_main, blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
     def __str__(self):
-        return f"Задача: {self.task}, Дата создания {self.datetime}, Путь файлов: {self.image}"
+        return f"Задача: {self.task}, Дата создания: {self.datetime}."
 
 """SubTaskComments model Limba"""
 
@@ -270,8 +285,8 @@ class ImageMainTaskComment(models.Model):
     class Meta:
         db_table = 'mainimage_comment'
 
-    comment_maintask = models.ForeignKey(MainTaskComment, related_name='maintask_img_comment', on_delete=models.CASCADE, null=True)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
+    comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
     def save(self, *args, **kwargs):
@@ -302,11 +317,10 @@ class SubTaskComment(models.Model):
     subtask = models.ForeignKey(SubTask, related_name='subtask_comment', on_delete=models.CASCADE, null=True)
     creator_comment = models.ForeignKey(User, related_name='creator_subcomment', on_delete=models.DO_NOTHING, null=True)
     comment = models.TextField(_('Комментарий'), max_length=100, default="")
-    # image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
     def __str__(self):
-        return f"Подзадача: {self.subtask}, Дата создания {self.datetime}, Путь файлов: {self.image}"
+        return f"Подзадача: {self.subtask}, Дата создания: {self.datetime}."
 
 class ImageSubTaskComment(models.Model):
     """Class SubImageComment"""
@@ -314,8 +328,8 @@ class ImageSubTaskComment(models.Model):
     class Meta:
         db_table = 'subimage_comment'
 
-    comment_subtask = models.ForeignKey(SubTaskComment, related_name='subtask_img_comment', on_delete=models.CASCADE, null=True)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
+    comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
     def save(self, *args, **kwargs):
