@@ -273,15 +273,6 @@ class ImageSubTask(models.Model):
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
                 image_new.save(self.image.path, quality=28, optimize=True)
-        if (width < 600):
-            image_new.save(self.image.path)
-        else:
-            if (width > 1920):
-                new_width = 1920
-                new_height = int(new_width*height/width)
-            #    print(new_height)
-                image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-            image_new.save(self.image.path, quality=25, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImage: {self.image}"
@@ -388,7 +379,7 @@ class ImageSubTaskComment(models.Model):
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
                 image_new.save(self.image.path, quality=28, optimize=True)
-                
+
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
 
@@ -399,5 +390,15 @@ def post_delete_image_main(sender, instance, *args, **kwargs):
 
 @receiver(models.signals.post_delete, sender=ImageSubTask)
 def post_delete_image_sub(sender, instance, *args, **kwargs):
+    if instance.image:
+        _delete_file(instance.image.path)
+
+@receiver(models.signals.post_delete, sender=ImageMainTaskComment)
+def post_delete_image_comment_maintask(sender, instance, *args, **kwargs):
+    if instance.image:
+        _delete_file(instance.image.path)
+
+@receiver(models.signals.post_delete, sender=ImageSubTaskComment)
+def post_delete_image_comment_subtask(sender, instance, *args, **kwargs):
     if instance.image:
         _delete_file(instance.image.path)

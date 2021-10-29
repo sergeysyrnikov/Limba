@@ -52,7 +52,7 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'image_url': unquote(instance.image.url),
-            'subtask': instance.task.id,
+            'subtask': instance.subtask.id,
             'datetime': instance.datetime
         }
 
