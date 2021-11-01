@@ -12,7 +12,7 @@ import glob
 from PIL import Image
 # from .managers import CustomUserManager
 
-quality_photo_save = 25
+quality_photo_save = 20
 
 def path_folder(path_abs):
     index = 0
