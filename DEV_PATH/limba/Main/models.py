@@ -12,6 +12,8 @@ import glob
 from PIL import Image
 # from .managers import CustomUserManager
 
+quality_photo_save = 25
+
 def path_folder(path_abs):
     index = 0
     for i,el in enumerate(path_abs):
@@ -228,7 +230,7 @@ class ImageMain(models.Model):
                     new_width = 1920
                     new_height = int(new_width*height/width)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
         else:
             if (height < 600):
                 image_new.save(self.image.path)
@@ -237,7 +239,7 @@ class ImageMain(models.Model):
                     new_height = 1080
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
 
 """SubImage model Limba"""
 
@@ -264,7 +266,7 @@ class ImageSubTask(models.Model):
                     new_width = 1920
                     new_height = int(new_width*height/width)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
         else:
             if (height < 600):
                 image_new.save(self.image.path)
@@ -273,7 +275,7 @@ class ImageSubTask(models.Model):
                     new_height = 1080
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImage: {self.image}"
@@ -319,7 +321,7 @@ class ImageMainTaskComment(models.Model):
                     new_width = 1920
                     new_height = int(new_width*height/width)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
         else:
             if (height < 600):
                 image_new.save(self.image.path)
@@ -328,7 +330,7 @@ class ImageMainTaskComment(models.Model):
                     new_height = 1080
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, MainImageComment: {self.image}"
@@ -370,7 +372,7 @@ class ImageSubTaskComment(models.Model):
                     new_width = 1920
                     new_height = int(new_width*height/width)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
         else:
             if (height < 600):
                 image_new.save(self.image.path)
@@ -379,7 +381,7 @@ class ImageSubTaskComment(models.Model):
                     new_height = 1080
                     new_width = int(new_height*width/height)
                     image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
+                image_new.save(self.image.path, quality=quality_photo_save, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
