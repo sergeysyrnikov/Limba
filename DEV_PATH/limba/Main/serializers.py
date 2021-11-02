@@ -17,7 +17,8 @@ from .models import (
     MainTask, 
     MainTaskComment, 
     SubDepartmentObject, 
-    Object, 
+    Object,
+    ImageObject, 
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
@@ -25,6 +26,21 @@ from .models import (
 )
 
 UserModel = get_user_model()
+
+class ImageObjectSerializer(serializers.ModelSerializer):
+    """Class ImageObject Serializer"""
+
+    class Meta:
+        model = ImageObject
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'image_url': unquote(instance.image.url),
+            'object': instance.object.id,
+            'datetime': instance.datetime
+        }
 
 class ImageMainSerializer(serializers.ModelSerializer):
     """Class ImageMain Serializer"""
@@ -131,7 +147,8 @@ class ObjectSerializer(serializers.ModelSerializer):
 
     user = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
-    
+    object_img = ImageObjectSerializer(many = True, read_only=True)
+
     class Meta:
         model = Object
         fields = '__all__'
@@ -221,29 +238,3 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['groups'] = self.user.groups.values_list('name', flat=True)
         data['id'] = self.user.id
         return data
-
-# class ObjectDetailSerializer(serializers.ModelSerializer):
-    
-#     posts = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Object
-#         fields = '__all__'
-
-#     @staticmethod
-#     def get_posts(obj):
-#         return ContentPostSerializer(ContentPost.objects.filter(blog_category=obj), many=True).data
-
-# class ContentPostSerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = ContentPost
-#         fields = '__all__'
-
-# class ContentPostListRetrieveSerializer(serializers.ModelSerializer):
-    
-#     blog_category = ObjectSerializer()
-
-#     class Meta:
-#         model = ContentPost
-#         fields = '__all__'

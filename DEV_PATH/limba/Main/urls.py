@@ -5,7 +5,8 @@ from .views import (
     MainTaskCommentView, 
     SubTaskCommentView, 
     UserView, 
-    ObjectView, 
+    ObjectView,
+    ImageObjectView, 
     DepartmentView, 
     SubDepartmentObjectView, 
     MainTaskView, 
@@ -22,6 +23,7 @@ router = routers.DefaultRouter()
 router.register('users', UserView)
 router.register('users-info', UserInfoView)
 router.register('objects', ObjectView)
+router.register('object-images', ImageObjectView)
 router.register('departments', DepartmentView)
 router.register('subdepartments', SubDepartmentObjectView)
 router.register('maintasks', MainTaskView)

@@ -35,6 +35,11 @@ def _delete_file(path):
    if len(lst) == 0 and os.path.exists(path_f):
        shutil.rmtree(path_f)
 
+"""Path uploading object imgs"""
+
+def upload_path_object(self, filename):
+    return '/'.join(['imageObject', str(self.object.code), str(self.object.shortname), filename])
+
 """Path uploading main imgs"""
 
 def upload_path_main(self, filename):
@@ -61,13 +66,15 @@ def upload_path_sub_comment(self, filename):
         last_index = 10
     return '/'.join(['imageSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
 
-"""Object model Limba"""
+"""User model Limba"""
 
 class User(AbstractUser):
     """Class User"""
 
     def __str__(self):
         return f"{self.username}"
+
+"""User add info model Limba"""
 
 class UserAdditionalInfo(models.Model):
     """Class UserAdditionalInfo"""
@@ -96,6 +103,8 @@ class UserAdditionalInfo(models.Model):
     def __str__(self):
         return f"{_('Пользователь: ')}{self.user.username}."
 
+"""Object model Limba"""
+
 class Object(models.Model):
     """Class Object"""
     
@@ -117,6 +126,21 @@ class Object(models.Model):
 
     def __str__(self):
         return f"{_('Имя объекта: ')}{self.shortname}, {_('код: ')}{self.code}."
+
+"""Image object model Limba"""
+
+class ImageObject(models.Model):
+    """Class ImageObject"""
+  
+    class Meta:
+        db_table = 'objectimage'
+
+    object = models.ForeignKey(Object, related_name='object_img', on_delete=models.CASCADE, null=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_object, blank=True)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, ObjectImage: {self.image}"
 
 """Departments model Limba"""
 
@@ -215,30 +239,6 @@ class ImageMain(models.Model):
     def __str__(self):
         return f"Id: {self.id}, Image: {self.image}"
     
-    def save(self, *args, **kwargs):
-        super().save()
-        image_new= Image.open(self.image.path)
-        width = float(image_new.size[0])
-        height = float(image_new.size[1])
-        if (width > height):
-            if (width < 600):
-                image_new.save(self.image.path)
-            else:
-                if (width >= 1920):
-                    new_width = 1920
-                    new_height = int(new_width*height/width)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
-        else:
-            if (height < 600):
-                image_new.save(self.image.path)
-            else:
-                if (height >= 1080):
-                    new_height = 1080
-                    new_width = int(new_height*width/height)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
-
 """SubImage model Limba"""
 
 class ImageSubTask(models.Model):
@@ -250,30 +250,6 @@ class ImageSubTask(models.Model):
     subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
-    def save(self, *args, **kwargs):
-        super().save()
-        image_new= Image.open(self.image.path)
-        width = float(image_new.size[0])
-        height = float(image_new.size[1])
-        if (width > height):
-            if (width < 600):
-                image_new.save(self.image.path)
-            else:
-                if (width >= 1920):
-                    new_width = 1920
-                    new_height = int(new_width*height/width)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
-        else:
-            if (height < 600):
-                image_new.save(self.image.path)
-            else:
-                if (height >= 1080):
-                    new_height = 1080
-                    new_width = int(new_height*width/height)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImage: {self.image}"
@@ -305,30 +281,6 @@ class ImageMainTaskComment(models.Model):
     comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
-    def save(self, *args, **kwargs):
-        super().save()
-        image_new= Image.open(self.image.path)
-        width = float(image_new.size[0])
-        height = float(image_new.size[1])
-        if (width > height):
-            if (width < 600):
-                image_new.save(self.image.path)
-            else:
-                if (width >= 1920):
-                    new_width = 1920
-                    new_height = int(new_width*height/width)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
-        else:
-            if (height < 600):
-                image_new.save(self.image.path)
-            else:
-                if (height >= 1080):
-                    new_height = 1080
-                    new_width = int(new_height*width/height)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, MainImageComment: {self.image}"
@@ -356,30 +308,6 @@ class ImageSubTaskComment(models.Model):
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
-    def save(self, *args, **kwargs):
-        super().save()
-        image_new= Image.open(self.image.path)
-        width = float(image_new.size[0])
-        height = float(image_new.size[1])
-        if (width > height):
-            if (width < 600):
-                image_new.save(self.image.path)
-            else:
-                if (width >= 1920):
-                    new_width = 1920
-                    new_height = int(new_width*height/width)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
-        else:
-            if (height < 600):
-                image_new.save(self.image.path)
-            else:
-                if (height >= 1080):
-                    new_height = 1080
-                    new_width = int(new_height*width/height)
-                    image_new = image_new.resize((new_width, new_height), Image.ANTIALIAS)
-                image_new.save(self.image.path, quality=28, optimize=True)
 
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
