@@ -2,7 +2,8 @@ from django.db.models import fields
 from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
 from .models import ImageMain
 from .models import (
-    Object, 
+    Object,
+    ImageObject, 
     Department, 
     SubDepartmentObject, 
     MainTask, 
@@ -37,6 +38,18 @@ class ObjectFilter(rest_filters.FilterSet):
     class Meta:
         model = Object
         fields = ['id', 'code', 'user', "connected_workers"]
+
+class ObjectImageFilter(rest_filters.FilterSet):
+    """Class ObjectImageFilter"""
+
+    id = NumberFilter(field_name="id")
+    object_id = NumberFilter(field_name="object_id")
+    image = CharFilter(lookup_expr='iexact')
+
+
+    class Meta:
+        model = ImageObject
+        fields = ['id', 'object_id']
 
 class DepartmentFilter(rest_filters.FilterSet):
     """Class DepartmentFilter"""

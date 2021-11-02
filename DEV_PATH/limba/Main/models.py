@@ -12,8 +12,6 @@ import glob
 from PIL import Image
 # from .managers import CustomUserManager
 
-quality_photo_save = 20
-
 def path_folder(path_abs):
     index = 0
     for i,el in enumerate(path_abs):
@@ -36,6 +34,11 @@ def _delete_file(path):
        lst = glob.glob(join(path_f,'*.png'))
    if len(lst) == 0 and os.path.exists(path_f):
        shutil.rmtree(path_f)
+
+"""Path uploading object imgs"""
+
+def upload_path_object(self, filename):
+    return '/'.join(['imageObject', str(self.object.code), str(self.object.shortname), filename])
 
 """Path uploading main imgs"""
 
@@ -63,13 +66,15 @@ def upload_path_sub_comment(self, filename):
         last_index = 10
     return '/'.join(['imageSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
 
-"""Object model Limba"""
+"""User model Limba"""
 
 class User(AbstractUser):
     """Class User"""
 
     def __str__(self):
         return f"{self.username}"
+
+"""User add info model Limba"""
 
 class UserAdditionalInfo(models.Model):
     """Class UserAdditionalInfo"""
@@ -98,6 +103,8 @@ class UserAdditionalInfo(models.Model):
     def __str__(self):
         return f"{_('Пользователь: ')}{self.user.username}."
 
+"""Object model Limba"""
+
 class Object(models.Model):
     """Class Object"""
     
@@ -119,6 +126,21 @@ class Object(models.Model):
 
     def __str__(self):
         return f"{_('Имя объекта: ')}{self.shortname}, {_('код: ')}{self.code}."
+
+"""Image object model Limba"""
+
+class ImageObject(models.Model):
+    """Class ImageObject"""
+  
+    class Meta:
+        db_table = 'objectimage'
+
+    object = models.ForeignKey(Object, related_name='object_img', on_delete=models.CASCADE, null=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_object, blank=True)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, ObjectImage: {self.image}"
 
 """Departments model Limba"""
 
@@ -228,7 +250,7 @@ class ImageSubTask(models.Model):
     subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
+
     def __str__(self):
         return f"Id: {self.id}, SubImage: {self.image}"
 
@@ -259,7 +281,7 @@ class ImageMainTaskComment(models.Model):
     comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
+
     def __str__(self):
         return f"Id: {self.id}, MainImageComment: {self.image}"
 
@@ -286,7 +308,7 @@ class ImageSubTaskComment(models.Model):
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
+
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
 

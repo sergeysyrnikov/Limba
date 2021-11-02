@@ -10,7 +10,8 @@ from .models import (
     MainTask, 
     MainTaskComment, 
     SubDepartmentObject, 
-    Object, 
+    Object,
+    ImageObject, 
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
@@ -19,7 +20,8 @@ from .models import (
 from .filtrers import (
     MainTaskCommentImageFilter,
     SubTaskCommentImageFilter,
-    ObjectFilter, 
+    ObjectFilter,
+    ObjectImageFilter, 
     DepartmentFilter, 
     SubDepartmentFilter, 
     TaskFilter, 
@@ -46,6 +48,7 @@ from .service import (
 from .serializers import (
     UserSerializer,
     ObjectSerializer,
+    ImageObjectSerializer,
     DepartmentSerializer,
     SubDepartmentObjectSerializer,
     MainTaskSerializer,
@@ -87,6 +90,15 @@ class ObjectView(ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectFilter
     # pagination_class = PaginationObjects
+
+class ImageObjectView(ModelViewSet):
+    """Class ImageObjectView"""
+
+    queryset = ImageObject.objects.all()
+    serializer_class = ImageObjectSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = ObjectImageFilter
+    # pagination_class = PaginationSubTaskComments
 
 class DepartmentView(ModelViewSet):
     """Class DepartmentView"""
@@ -177,30 +189,4 @@ class ImageSubTaskCommentView(ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskCommentImageFilter
     # pagination_class = PaginationSubTaskComments
-
-
-    # action_to_serializer = {
-    #    "retrieve": BlogCategoryDetailSerializer,
-    # }
-
-    # def get_serializer_class(self):
-    #     return self.action_to_serializer.get(
-    #         self.action,
-    #         self.serializer_class
-    #     )
-
-# class ContentPostView(ModelViewSet):
-#     queryset = ContentPost.objects.all()
-#     serializer_class = ContentPostSerializer
-
-#     action_to_serializer = {
-#         "list": ContentPostListRetrieveSerializer,
-#         "retrieve": ContentPostListRetrieveSerializer,
-#     }
-
-#     def get_serializer_class(self):
-#         return self.action_to_serializer.get(
-#             self.action,
-#             self.serializer_class
-#         )
 
