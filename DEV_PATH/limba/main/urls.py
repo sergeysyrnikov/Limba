@@ -16,7 +16,8 @@ from .views import (
     UserInfoView,
     ImageMainTaskCommentView,
     ImageSubTaskCommentView,
-    MyTokenObtainPairView
+    MyTokenObtainPairView,
+    home,
 )
 
 router = routers.DefaultRouter()
@@ -38,5 +39,7 @@ router.register('subtask-comment-images', ImageSubTaskCommentView)
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),
     path('token-refresh/', TokenRefreshView.as_view()),
+    # path('activate/<uidb64>/<token>/', activate, name='activate'),
+    path('home/', home, name="home"), 
     path('', include(router.urls))
 ]

@@ -127,7 +127,7 @@ class UserSerializer(serializers.ModelSerializer):
             'password', 
             'first_name', 
             'last_name', 
-            'email', 
+            'email',
             # 'is_staff', 
             # 'is_superuser', 
         ]

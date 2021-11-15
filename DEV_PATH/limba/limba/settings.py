@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 """My apps"""
 INSTALLED_APPS += [
-    'Main'
+    'main'
 ]
 
 MIDDLEWARE = [
@@ -103,7 +103,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '34ubitav',
         'HOST': 'localhost',
-        'PORT': 5440,
+        'PORT': 5434,
     }
 }
 
@@ -141,7 +141,7 @@ REDIS_PORT = '6379'
 # CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_BROKER_URL = 'amqp://localhost'
 
-AUTH_USER_MODEL = "Main.User" 
+AUTH_USER_MODEL = "main.User" 
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -177,5 +177,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'limba.sinaps@gmail.com'
+EMAIL_HOST_PASSWORD = 'sinaps281082'
+EMAIL_PORT = 587
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
