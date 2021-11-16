@@ -14,7 +14,8 @@ from .models import (
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
-    ImageSubTaskComment
+    ImageSubTaskComment,
+    PushNotification,
 )
 
 # """Class User admin"""    
@@ -138,3 +139,10 @@ class SubTaskComment(admin.ModelAdmin):
 
     list_display = [f.name for f in SubTaskComment._meta.fields]
     list_filter = [f.name for f in SubTaskComment._meta.fields]
+
+@admin.register(PushNotification)
+class PushNotification(admin.ModelAdmin):
+    """Class PushNotification"""
+
+    list_display = [f.name for f in PushNotification._meta.fields]
+    list_filter = [f.name for f in PushNotification._meta.fields]

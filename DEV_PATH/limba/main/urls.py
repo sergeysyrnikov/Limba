@@ -17,6 +17,7 @@ from .views import (
     ImageMainTaskCommentView,
     ImageSubTaskCommentView,
     MyTokenObtainPairView,
+    PushNotificationView,
     home,
     code,
 )
@@ -36,6 +37,7 @@ router.register('maintask-images', ImageMainView)
 router.register('subtask-images', ImageSubTaskView)
 router.register('maintask-comment-images', ImageMainTaskCommentView)
 router.register('subtask-comment-images', ImageSubTaskCommentView)
+router.register('push-notifications', PushNotificationView)
 
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),

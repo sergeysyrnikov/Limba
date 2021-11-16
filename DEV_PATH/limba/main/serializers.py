@@ -22,7 +22,8 @@ from .models import (
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
-    ImageSubTaskComment
+    ImageSubTaskComment,
+    PushNotification,
 )
 
 UserModel = get_user_model()
@@ -238,3 +239,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['groups'] = self.user.groups.values_list('name', flat=True)
         data['id'] = self.user.id
         return data
+
+class PushNotificationSerializer(serializers.ModelSerializer):
+    """Class PushNotification Serializer"""
+
+    class Meta:
+        model = PushNotification
+        fields = '__all__'

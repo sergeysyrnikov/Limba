@@ -27,7 +27,8 @@ from .models import (
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
-    ImageSubTaskComment
+    ImageSubTaskComment,
+    PushNotification,
 )
 from .filtrers import (
     MainTaskCommentImageFilter,
@@ -42,7 +43,8 @@ from .filtrers import (
     SubTaskImageFilter,
     MainTaskCommentFilter,
     SubTaskCommentFilter,
-    UserFilter
+    UserFilter,
+    PushNotificationFilter,
 )
 from .service import (
     PaginationUsers,
@@ -72,7 +74,8 @@ from .serializers import (
     UserInfoSerialiser,
     MyTokenObtainPairSerializer,
     ImageMainTaskCommentSerializer,
-    ImageSubTaskCommentSerializer
+    ImageSubTaskCommentSerializer,
+    PushNotificationSerializer,
 )
 
 class UserView(ModelViewSet):
@@ -88,23 +91,6 @@ class UserView(ModelViewSet):
         user = User.objects.get(id=instance['id'])
         user.is_active = False
         user.save()
-        email = user.email
-        mail_subject = 'Активируйте свой аккаунт в Limba.'
-        code = 0
-        try:
-            code = request.data["code"]
-        except Exception as ex:
-            print(ex)
-        message = render_to_string('main/home_limba.html',
-        {
-            'user': user,
-            'code': code
-        })
-        email = EmailMessage(
-            mail_subject, message, to=[email]
-        )
-        email.send()
-        print(instance)
         return Response({
             'status': 'success', 
             'id': instance['id'],
@@ -238,6 +224,14 @@ class ImageSubTaskCommentView(ModelViewSet):
     filter_class = SubTaskCommentImageFilter
     # pagination_class = PaginationSubTaskComments
 
+class PushNotificationView(ModelViewSet):
+    """Class PushNotificationView"""
+
+    queryset = PushNotification.objects.all()
+    serializer_class = PushNotificationSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = PushNotificationFilter
+
 # def activate(request, uidb64, token):
 #     try:
 #         uid = urlsafe_base64_decode(uidb64).decode()
@@ -259,9 +253,18 @@ def home(request):
 def code(request):
     try:
         if request.method == "POST":
-            print(request.data["code"])
-            print(request.data["email"])
-            print("Code: ", str(code))
+            code_reg = str(request.data["code"])
+            email = request.data["email"]
+            message = render_to_string('main/home_limba.html',
+            {
+                'email': email,
+                'code': code_reg
+            })
+            mail_subject = 'Активируйте свой аккаунт в Limba.'
+            email = EmailMessage(
+                mail_subject, message, to=[email]
+            )
+            email.send() 
     except Exception as ex:
         print(ex)
     return HttpResponse("")

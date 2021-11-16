@@ -318,6 +318,23 @@ class ImageSubTaskComment(models.Model):
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
 
+"""PushNotifications model Limba"""
+
+class PushNotification(models.Model):
+    """Class PushNotification"""
+  
+    class Meta:
+        db_table = 'push_notifications'
+
+    title = models.CharField(_('Заголовок'), max_length=200, default="")
+    body = models.CharField(_('Сообщение'), max_length=400, default="")
+    data = models.CharField(_('Данные'), max_length=600, default="")
+    type = models.DecimalField(_('Тип сообщения'), max_digits=1, decimal_places=0, default=0)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, Title: {self.title}"
+
 @receiver(models.signals.post_delete, sender=ImageMain)
 def post_delete_image_main(sender, instance, *args, **kwargs):
     if instance.image:

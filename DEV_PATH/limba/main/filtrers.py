@@ -14,7 +14,8 @@ from .models import (
     ImageSubTask,
     UserAdditionalInfo,
     ImageMainTaskComment,
-    ImageSubTaskComment
+    ImageSubTaskComment,
+    PushNotification,
 )
 
 class UserFilter(rest_filters.FilterSet):
@@ -162,3 +163,13 @@ class SubTaskCommentImageFilter(rest_filters.FilterSet):
     class Meta:
         model = ImageSubTaskComment
         fields = ['id', 'comment_subtask_id']
+
+class PushNotificationFilter(rest_filters.FilterSet):
+    """Class PushNotificationFilter"""
+
+    id = NumberFilter(field_name="id")
+    type = NumberFilter(field_name="type")
+
+    class Meta:
+        model = PushNotification
+        fields = ['id', 'type']
