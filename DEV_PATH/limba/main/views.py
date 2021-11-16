@@ -2,15 +2,17 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
+# from django.contrib.sites.shortcuts import get_current_site
+# from django.utils.encoding import force_bytes
+# from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404, render
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+# from rest_framework.decorators import action
+from django.shortcuts import render
+# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import (
     SubTaskComment, 
     SubTask, 
@@ -103,7 +105,12 @@ class UserView(ModelViewSet):
         )
         email.send()
         print(instance)
-        return Response({'status': 'success', 'pk': instance['id']})
+        return Response({
+            'status': 'success', 
+            'id': instance['id'],
+            'first_name': instance['first_name'],
+            'last_name': instance['last_name']
+        })
     
     # @action(detail=True, methods=['post'])
     # def set_active(self, request, pk=None):
@@ -246,3 +253,15 @@ class ImageSubTaskCommentView(ModelViewSet):
 
 def home(request):
     return render(request, 'main/home_limba.html', {})
+
+@api_view(["POST"])
+@csrf_exempt 
+def code(request):
+    try:
+        if request.method == "POST":
+            print(request.data["code"])
+            print(request.data["email"])
+            print("Code: ", str(code))
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
