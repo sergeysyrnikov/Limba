@@ -12,6 +12,8 @@ import glob
 from PIL import Image
 # from .managers import CustomUserManager
 
+"""Function create folder"""
+
 def path_folder(path_abs):
     index = 0
     for i,el in enumerate(path_abs):
@@ -114,7 +116,7 @@ class Object(models.Model):
     user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True)
     code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, unique=True, null=True) 
     shortname = models.CharField(_('Сокращённое имя объекта'), max_length=8, default='', unique=True) 
-    fullname = models.CharField(_('Полное имя объекта'), max_length=15, default='')
+    fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='')
     supervisor = models.CharField(_('Руководитель проекта'), max_length=30, default='')
     chief = models.CharField(_('Начальник участка'), max_length=30, default='')
     group_number = models.DecimalField(_('Номер проектной группы'), max_digits=5, decimal_places=0, unique=True, null=True) 
@@ -270,7 +272,7 @@ class MainTaskComment(models.Model):
     def __str__(self):
         return f"Задача: {self.task}, Дата создания: {self.datetime}."
 
-"""SubTaskComments model Limba"""
+"""MainTaskImageComments model Limba"""
 
 class ImageMainTaskComment(models.Model):
     """Class MainImageComment"""
@@ -285,6 +287,8 @@ class ImageMainTaskComment(models.Model):
     def __str__(self):
         return f"Id: {self.id}, MainImageComment: {self.image}"
 
+"""SubTaskComments model Limba"""
+
 class SubTaskComment(models.Model):
     """Class SubTaskComment"""
 
@@ -298,6 +302,8 @@ class SubTaskComment(models.Model):
     
     def __str__(self):
         return f"Подзадача: {self.subtask}, Дата создания: {self.datetime}."
+
+"""SubTaskImageComments model Limba"""
 
 class ImageSubTaskComment(models.Model):
     """Class SubImageComment"""
