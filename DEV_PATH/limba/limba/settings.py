@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 """My apps"""
 INSTALLED_APPS += [
-    'Main'
+    'main'
 ]
 
 MIDDLEWARE = [
@@ -136,6 +136,14 @@ SIMPLE_JWT = {
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'limba.sinaps@gmail.com'
+EMAIL_HOST_PASSWORD = 'sinaps281082'
+EMAIL_PORT = 587
+
 # CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT
 # BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 # CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
