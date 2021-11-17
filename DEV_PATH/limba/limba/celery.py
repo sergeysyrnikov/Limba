@@ -11,7 +11,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
     'db_trassir_1s': {
-        'task': 'Main.tasks.test_function',
+        'task': 'main.tasks.test_function',
         'schedule': 1.0
     }
 }

@@ -149,7 +149,7 @@ EMAIL_PORT = 587
 # CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_BROKER_URL = 'amqp://localhost'
 
-AUTH_USER_MODEL = "Main.User" 
+AUTH_USER_MODEL = "main.User" 
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -1,6 +1,18 @@
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
+# from django.contrib.sites.shortcuts import get_current_site
+# from django.utils.encoding import force_bytes
+# from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+# from rest_framework.decorators import action
+from django.shortcuts import render
+# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import (
     SubTaskComment, 
     SubTask, 
@@ -15,7 +27,8 @@ from .models import (
     User,
     UserAdditionalInfo,
     ImageMainTaskComment,
-    ImageSubTaskComment
+    ImageSubTaskComment,
+    PushNotification,
 )
 from .filtrers import (
     MainTaskCommentImageFilter,
@@ -30,7 +43,8 @@ from .filtrers import (
     SubTaskImageFilter,
     MainTaskCommentFilter,
     SubTaskCommentFilter,
-    UserFilter
+    UserFilter,
+    PushNotificationFilter,
 )
 from .service import (
     PaginationUsers,
@@ -60,7 +74,8 @@ from .serializers import (
     UserInfoSerialiser,
     MyTokenObtainPairSerializer,
     ImageMainTaskCommentSerializer,
-    ImageSubTaskCommentSerializer
+    ImageSubTaskCommentSerializer,
+    PushNotificationSerializer,
 )
 
 class UserView(ModelViewSet):
@@ -69,6 +84,25 @@ class UserView(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     # pagination_class = PaginationUsers
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        instance = response.data
+        user = User.objects.get(id=instance['id'])
+        user.is_active = False
+        user.save()
+        return Response({
+            'status': 'success', 
+            'id': instance['id'],
+            'first_name': instance['first_name'],
+            'last_name': instance['last_name']
+        })
+    
+    # @action(detail=True, methods=['post'])
+    # def set_active(self, request, pk=None):
+    #     user = self.get_object()
+    #     print("Lsdfldsfdsf")
+    #     print(user)
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -190,3 +224,47 @@ class ImageSubTaskCommentView(ModelViewSet):
     filter_class = SubTaskCommentImageFilter
     # pagination_class = PaginationSubTaskComments
 
+class PushNotificationView(ModelViewSet):
+    """Class PushNotificationView"""
+
+    queryset = PushNotification.objects.all()
+    serializer_class = PushNotificationSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = PushNotificationFilter
+
+# def activate(request, uidb64, token):
+#     try:
+#         uid = urlsafe_base64_decode(uidb64).decode()
+#         user = User._default_manager.get(pk=uid)
+#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+#     if user is not None and default_token_generator.check_token(user, token):
+#         user.is_active = True
+#         user.save()
+#         return HttpResponse('Спасибо за подтверждение вашей почты. Вы можете войти в свой аккаунт!')
+#     else:
+#         return HttpResponse('Активация аккаунта завершилась неудачей!')
+
+def home(request):
+    return render(request, 'main/home_limba.html', {})
+
+@api_view(["POST"])
+@csrf_exempt 
+def code(request):
+    try:
+        if request.method == "POST":
+            code_reg = str(request.data["code"])
+            email = request.data["email"]
+            message = render_to_string('main/home_limba.html',
+            {
+                'email': email,
+                'code': code_reg
+            })
+            mail_subject = 'Активируйте свой аккаунт в Limba.'
+            email = EmailMessage(
+                mail_subject, message, to=[email]
+            )
+            email.send() 
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
