@@ -196,8 +196,8 @@ class MainTask(models.Model):
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
     executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True)
-    about = models.TextField(_('Подробности'), max_length=200, default="")
-    location = models.CharField(_('Местоположение'), max_length=100, default="")
+    about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
+    location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -218,8 +218,8 @@ class SubTask(models.Model):
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
     executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True)
-    about = models.TextField(_('Подробности'), max_length=200, default="")
-    location = models.CharField(_('Местоположение'), max_length=100, default="")
+    about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
+    location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
