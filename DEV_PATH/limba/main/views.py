@@ -44,6 +44,7 @@ from .filtrers import (
     MainTaskCommentFilter,
     SubTaskCommentFilter,
     UserFilter,
+    UserMainFilter,
     PushNotificationFilter,
 )
 from .service import (
@@ -83,6 +84,8 @@ class UserView(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = UserMainFilter
     # pagination_class = PaginationUsers
 
     def create(self, request, *args, **kwargs):

@@ -18,6 +18,12 @@ from .models import (
     PushNotification,
 )
 
+class UserMainFilter(rest_filters.FilterSet):
+    """Class UserMainFilter"""
+
+    id = NumberFilter(field_name="id")
+    email = CharFilter(lookup_expr='iexact')
+
 class UserFilter(rest_filters.FilterSet):
     """Class UserFilter"""
 
