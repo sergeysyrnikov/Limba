@@ -2,6 +2,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated 
+from rest_framework import generics
+
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.utils.encoding import force_bytes
 # from django.contrib.auth.tokens import default_token_generator
@@ -47,6 +51,7 @@ from .filtrers import (
     UserMainFilter,
     PushNotificationFilter,
 )
+
 from .service import (
     PaginationUsers,
     PaginationObjects, 
@@ -60,6 +65,7 @@ from .service import (
     PaginationSubTaskComments,
     PaginationUsersInfo    
 )
+
 from .serializers import (
     UserSerializer,
     ObjectSerializer,
@@ -77,6 +83,7 @@ from .serializers import (
     ImageMainTaskCommentSerializer,
     ImageSubTaskCommentSerializer,
     PushNotificationSerializer,
+    ChangePasswordSerializer,
 )
 
 class UserView(ModelViewSet):
@@ -234,6 +241,35 @@ class PushNotificationView(ModelViewSet):
     serializer_class = PushNotificationSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationFilter
+
+class ChangePasswordView(generics.UpdateAPIView):
+        """
+        An endpoint for changing password.
+        """
+        serializer_class = ChangePasswordSerializer
+        model = User
+        # permission_classes = (IsAuthenticated,)
+
+        def update(self, request, *args, **kwargs):
+            serializer = self.get_serializer(data=request.data)
+
+            if serializer.is_valid():
+                # Check old password
+                # set_password also hashes the password that the user will get
+                id = serializer.data.get("id")
+                object = User.objects.get(pk=int(id))
+                object.set_password(serializer.data.get("password"))
+                object.save()
+                response = {
+                    'status': 'success',
+                    'code': status.HTTP_200_OK,
+                    'message': 'Password updated successfully',
+                    'data': []
+                }
+
+                return Response(response)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # def activate(request, uidb64, token):
 #     try:

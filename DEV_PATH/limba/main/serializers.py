@@ -28,6 +28,15 @@ from .models import (
 
 UserModel = get_user_model()
 
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change endpoint.
+    """
+    id = serializers.IntegerField()
+    password = serializers.CharField(required=True)
+
 class ImageObjectSerializer(serializers.ModelSerializer):
     """Class ImageObject Serializer"""
 

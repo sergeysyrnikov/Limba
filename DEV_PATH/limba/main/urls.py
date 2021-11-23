@@ -18,6 +18,7 @@ from .views import (
     ImageSubTaskCommentView,
     MyTokenObtainPairView,
     PushNotificationView,
+    ChangePasswordView,
     home,
     code,
 )
@@ -42,6 +43,7 @@ router.register('push-notifications', PushNotificationView)
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),
     path('token-refresh/', TokenRefreshView.as_view()),
+    path('reset-password/', ChangePasswordView.as_view()),
     # path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('home/', home, name="home"),
     path('code/', code, name="code"), 
