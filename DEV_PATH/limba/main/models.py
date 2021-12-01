@@ -98,6 +98,7 @@ class UserAdditionalInfo(models.Model):
     abbreviation = models.CharField(_('Аббревиатура ФИО'), max_length=3, blank=False, default="")
     position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=6)
     type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=2)
+    type_system = models.DecimalField(_('Тип системы'), max_digits=1 ,decimal_places=0 ,default=0)
     code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="")
     index_color = models.DecimalField(_('Цвет иконки пользователя'), max_digits=1 ,decimal_places=0 ,default=0)
     datetime = models.DateTimeField(auto_now_add=timezone.now)

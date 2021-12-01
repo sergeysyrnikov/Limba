@@ -294,10 +294,12 @@ def code(request):
         if request.method == "POST":
             code_reg = str(request.data["code"])
             email = request.data["email"]
+            data = request.data["data"]
             message = render_to_string('main/home_limba.html',
             {
                 'email': email,
-                'code': code_reg
+                'code': code_reg,
+                'data': data
             })
             mail_subject = 'Активируйте свой аккаунт в Limba.'
             email = EmailMessage(
