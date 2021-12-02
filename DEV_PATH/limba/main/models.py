@@ -198,6 +198,7 @@ class MainTask(models.Model):
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
     executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True)
     about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
+    object = models.DecimalField(_('Объект'), max_digits=6, decimal_places=0, default=999999)
     location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
