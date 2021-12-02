@@ -87,6 +87,7 @@ class TaskFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     subdepartment_id = NumberFilter(field_name="subdepartment_object_id")
     connected_workers = NumberFilter(field_name="connected_workers")
+    object = CharFilter(lookup_expr='iexact')
 
     class Meta:
         model = MainTask
