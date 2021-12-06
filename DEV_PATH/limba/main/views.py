@@ -107,7 +107,7 @@ class UserView(ModelViewSet):
         response = super().create(request, *args, **kwargs)
         instance = response.data
         user = User.objects.get(id=instance['id'])
-        user.is_active = False
+        user.is_active = True
         user.save()
         return Response({
             'status': 'success', 
