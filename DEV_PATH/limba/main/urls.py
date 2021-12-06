@@ -3,7 +3,11 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     MainTaskCommentView, 
-    SubTaskCommentView, 
+    SubTaskCommentView,
+    UploadFileMaintaskCommentView,
+    UploadFileObjectView,
+    UploadFileSubTaskView,
+    UploadFileSubtaskCommentView, 
     UserView, 
     ObjectView,
     ImageObjectView, 
@@ -18,6 +22,8 @@ from .views import (
     ImageSubTaskCommentView,
     MyTokenObtainPairView,
     PushNotificationView,
+    ChangePasswordView,
+    UploadFileMainTaskView,
     home,
     code,
 )
@@ -38,10 +44,16 @@ router.register('subtask-images', ImageSubTaskView)
 router.register('maintask-comment-images', ImageMainTaskCommentView)
 router.register('subtask-comment-images', ImageSubTaskCommentView)
 router.register('push-notifications', PushNotificationView)
+router.register('maintask-files', UploadFileMainTaskView)
+router.register('subtask-files', UploadFileSubTaskView)
+router.register('object-files', UploadFileObjectView)
+router.register('maintask-comment-files', UploadFileMaintaskCommentView)
+router.register('subtask-comment-files', UploadFileSubtaskCommentView)
 
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),
     path('token-refresh/', TokenRefreshView.as_view()),
+    path('reset-password/', ChangePasswordView.as_view()),
     # path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('home/', home, name="home"),
     path('code/', code, name="code"), 

@@ -2,10 +2,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.utils.encoding import force_bytes
 # from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from rest_framework import status
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -29,6 +31,11 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    UploadFileMainTask,
+    UploadFileSubTask,
+    UploadFileObject,
+    FileMainTaskComment,
+    FileSubTaskComment,
 )
 from .filtrers import (
     MainTaskCommentImageFilter,
@@ -45,6 +52,11 @@ from .filtrers import (
     SubTaskCommentFilter,
     UserFilter,
     PushNotificationFilter,
+    ObjectFileFilter,
+    MainTaskFileFilter,
+    SubTaskFileFilter,
+    MainTaskCommentFileFilter,
+    SubTaskCommentFileFilter,
 )
 from .service import (
     PaginationUsers,
@@ -76,6 +88,12 @@ from .serializers import (
     ImageMainTaskCommentSerializer,
     ImageSubTaskCommentSerializer,
     PushNotificationSerializer,
+    ChangePasswordSerializer,
+    UploadFileMainTaskSerializer,
+    UploadFileSubTaskSerializer,
+    UploadFileObjectSerializer,
+    FileMainTaskCommentSerializer,
+    FileSubTaskCommentSerializer,
 )
 
 class UserView(ModelViewSet):
@@ -231,6 +249,75 @@ class PushNotificationView(ModelViewSet):
     serializer_class = PushNotificationSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationFilter
+
+class ChangePasswordView(generics.UpdateAPIView):
+        """
+        An endpoint for changing password.
+        """
+        serializer_class = ChangePasswordSerializer
+        model = User
+        # permission_classes = (IsAuthenticated,)
+
+        def update(self, request, *args, **kwargs):
+            serializer = self.get_serializer(data=request.data)
+
+            if serializer.is_valid():
+                # Check old password
+                # set_password also hashes the password that the user will get
+                id = serializer.data.get("id")
+                object = User.objects.get(pk=int(id))
+                object.set_password(serializer.data.get("password"))
+                object.save()
+                response = {
+                    'status': 'success',
+                    'code': status.HTTP_200_OK,
+                    'message': 'Password updated successfully',
+                    'data': []
+                }
+
+                return Response(response)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UploadFileMainTaskView(ModelViewSet):
+    """Class UploadFileMainTaskView"""
+
+    queryset = UploadFileMainTask.objects.all()
+    serializer_class = UploadFileMainTaskSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = MainTaskFileFilter
+
+class UploadFileSubTaskView(ModelViewSet):
+    """Class UploadFileSubTaskView"""
+
+    queryset = UploadFileSubTask.objects.all()
+    serializer_class = UploadFileSubTaskSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = SubTaskFileFilter
+
+class UploadFileObjectView(ModelViewSet):
+    """Class UploadFileSubTaskView"""
+
+    queryset = UploadFileObject.objects.all()
+    serializer_class = UploadFileObjectSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = ObjectFileFilter
+
+class UploadFileMaintaskCommentView(ModelViewSet):
+    """Class UploadFileMaintaskCommentView"""
+
+    queryset = FileMainTaskComment.objects.all()
+    serializer_class = FileMainTaskCommentSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = MainTaskCommentFileFilter
+
+class UploadFileSubtaskCommentView(ModelViewSet):
+    """Class UploadFileSubtaskCommentView"""
+
+    queryset = FileSubTaskComment.objects.all()
+    serializer_class = FileSubTaskCommentSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = SubTaskCommentFileFilter
 
 # def activate(request, uidb64, token):
 #     try:

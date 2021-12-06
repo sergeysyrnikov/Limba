@@ -42,6 +42,11 @@ def _delete_file(path):
 def upload_path_object(self, filename):
     return '/'.join(['imageObject', str(self.object.code), str(self.object.shortname), filename])
 
+"""Path uploading object files"""
+
+def upload_path_files_to_object(self, filename):
+    return '/'.join(['filesObject', str(self.object.code), str(self.object.shortname), filename])
+
 """Path uploading main imgs"""
 
 def upload_path_main(self, filename):
@@ -67,6 +72,32 @@ def upload_path_sub_comment(self, filename):
     if (last_index > 10):
         last_index = 10
     return '/'.join(['imageSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
+
+"""Path uploading files maintask"""
+
+def upload_path_files_maintask(self, filename):
+    return '/'.join(['filesMainTask', str(self.task.full_link).replace(" ", "").replace("|", "/"), str(self.task.task_name), filename])
+
+"""Path uploading files subtask"""
+
+def upload_path_files_subtask(self, filename):
+    return '/'.join(['filesSubTask', str(self.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.subtask.task_name), filename])
+
+"""Path uploading main comment"""
+
+def upload_path_files_maintask_comment(self, filename):
+    last_index = len(self.comment_maintask.comment)
+    if (last_index > 10):
+        last_index = 10
+    return '/'.join(['filesMainTask', str(self.comment_maintask.task.full_link).replace(" ", "").replace("|", "/"), str(self.comment_maintask.task.task_name), 'Комментарий #' + str(self.comment_maintask.id) + '(' + self.comment_maintask.comment[0:last_index] + ')', filename])
+
+"""Path uploading main comment"""
+
+def upload_path_files_subtask_comment(self, filename):
+    last_index = len(self.comment_subtask.comment)
+    if (last_index > 10):
+        last_index = 10
+    return '/'.join(['filesSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
 
 """User model Limba"""
 
@@ -287,6 +318,22 @@ class ImageMainTaskComment(models.Model):
     def __str__(self):
         return f"Id: {self.id}, MainImageComment: {self.image}"
 
+"""MainTaskFileComment model Limba"""
+
+class FileMainTaskComment(models.Model):
+    """Class FileMainTaskComment"""
+  
+    class Meta:
+        db_table = 'files_maintask_comment'
+
+    name_file = models.CharField(max_length = 50)
+    comment_maintask = models.ForeignKey(MainTaskComment, related_name='files_maintask_comment', on_delete=models.CASCADE, null=True)
+    file = models.FileField(upload_to = upload_path_files_maintask_comment)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, File MainComment: {self.file}"
+
 """SubTaskComments model Limba"""
 
 class SubTaskComment(models.Model):
@@ -318,6 +365,22 @@ class ImageSubTaskComment(models.Model):
     def __str__(self):
         return f"Id: {self.id}, SubImageComment: {self.image}"
 
+"""SubTaskFileComment model Limba"""
+
+class FileSubTaskComment(models.Model):
+    """Class FileSubTaskComment"""
+  
+    class Meta:
+        db_table = 'files_subtask_comment'
+
+    name_file = models.CharField(max_length = 50)
+    comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True)
+    file = models.FileField(upload_to = upload_path_files_subtask_comment)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, File SubtaskComment: {self.file}"
+
 """PushNotifications model Limba"""
 
 class PushNotification(models.Model):
@@ -334,6 +397,59 @@ class PushNotification(models.Model):
 
     def __str__(self):
         return f"Id: {self.id}, Title: {self.title}"
+
+"""Files model file maintask"""
+
+class UploadFileMainTask(models.Model):
+    """Class UploadFileMainTask"""
+
+    class Meta:
+        db_table = 'maintask_files'
+
+    task = models.ForeignKey(MainTask, related_name='maintask_file', on_delete=models.CASCADE, null=True)
+    name_file = models.CharField(max_length = 50)
+    file = models.FileField(upload_to = upload_path_files_maintask)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, Name file: {self.name_file}"
+
+"""Files model file subtask"""
+
+class UploadFileSubTask(models.Model):
+    """Class UploadFileSubTask"""
+
+    class Meta:
+        db_table = 'subtask_files'
+
+    subtask = models.ForeignKey(SubTask, related_name='subtask_file', on_delete=models.CASCADE, null=True)
+    name_file = models.CharField(max_length = 50)
+    file = models.FileField(upload_to = upload_path_files_subtask)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, Name file: {self.name_file}"
+
+"""Files model file object"""
+
+class UploadFileObject(models.Model):
+    """Class UploadFileObject"""
+
+    class Meta:
+        db_table = 'object_files'
+
+    object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True)
+    name_file = models.CharField(max_length = 50)
+    file = models.FileField(upload_to = upload_path_files_to_object)
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, Name file: {self.name_file}"
+
+@receiver(models.signals.post_delete, sender=ImageObject)
+def post_delete_image_object(sender, instance, *args, **kwargs):
+    if instance.image:
+        _delete_file(instance.image.path)
 
 @receiver(models.signals.post_delete, sender=ImageMain)
 def post_delete_image_main(sender, instance, *args, **kwargs):
@@ -354,3 +470,28 @@ def post_delete_image_comment_maintask(sender, instance, *args, **kwargs):
 def post_delete_image_comment_subtask(sender, instance, *args, **kwargs):
     if instance.image:
         _delete_file(instance.image.path)
+
+@receiver(models.signals.post_delete, sender=UploadFileObject)
+def post_delete_file_object(sender, instance, *args, **kwargs):
+    if instance.file:
+        _delete_file(instance.file.path)
+
+@receiver(models.signals.post_delete, sender=UploadFileMainTask)
+def post_delete_file_maintask(sender, instance, *args, **kwargs):
+    if instance.file:
+        _delete_file(instance.file.path)
+
+@receiver(models.signals.post_delete, sender=UploadFileSubTask)
+def post_delete_file_subtask(sender, instance, *args, **kwargs):
+    if instance.file:
+        _delete_file(instance.file.path)
+
+@receiver(models.signals.post_delete, sender=FileMainTaskComment)
+def post_delete_file_maintask_comment(sender, instance, *args, **kwargs):
+    if instance.file:
+        _delete_file(instance.file.path)
+
+@receiver(models.signals.post_delete, sender=FileSubTaskComment)
+def post_delete_file_subtask_comment(sender, instance, *args, **kwargs):
+    if instance.file:
+        _delete_file(instance.file.path)

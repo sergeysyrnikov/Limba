@@ -1,6 +1,5 @@
 from django.db.models import fields
 from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
-from .models import ImageMain
 from .models import (
     Object,
     ImageObject, 
@@ -16,6 +15,11 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    UploadFileMainTask,
+    UploadFileSubTask,
+    UploadFileObject,
+    FileMainTaskComment,
+    FileSubTaskComment,
 )
 
 class UserFilter(rest_filters.FilterSet):
@@ -50,6 +54,18 @@ class ObjectImageFilter(rest_filters.FilterSet):
 
     class Meta:
         model = ImageObject
+        fields = ['id', 'object_id']
+
+class ObjectFileFilter(rest_filters.FilterSet):
+    """Class ObjectFileFilter"""
+
+    id = NumberFilter(field_name="id")
+    object_id = NumberFilter(field_name="object_id")
+    file = CharFilter(lookup_expr='iexact')
+
+
+    class Meta:
+        model = UploadFileObject
         fields = ['id', 'object_id']
 
 class DepartmentFilter(rest_filters.FilterSet):
@@ -104,9 +120,19 @@ class MainTaskImageFilter(rest_filters.FilterSet):
     task_id = NumberFilter(field_name="task_id")
     image = CharFilter(lookup_expr='iexact')
 
-
     class Meta:
         model = ImageMain
+        fields = ['id', 'task_id']
+
+class MainTaskFileFilter(rest_filters.FilterSet):
+    """Class MainTaskFileFilter"""
+
+    id = NumberFilter(field_name="id")
+    task_id = NumberFilter(field_name="task_id")
+    file = CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = UploadFileMainTask
         fields = ['id', 'task_id']
 
 class SubTaskImageFilter(rest_filters.FilterSet):
@@ -118,6 +144,17 @@ class SubTaskImageFilter(rest_filters.FilterSet):
 
     class Meta:
         model = ImageSubTask
+        fields = ['id', 'subtask_id']
+
+class SubTaskFileFilter(rest_filters.FilterSet):
+    """Class SubTaskFileFilter"""
+
+    id = NumberFilter(field_name="id")
+    subtask_id = NumberFilter(field_name="subtask_id")
+    file = CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = UploadFileSubTask
         fields = ['id', 'subtask_id']
 
 class MainTaskCommentFilter(rest_filters.FilterSet):
@@ -147,9 +184,19 @@ class MainTaskCommentImageFilter(rest_filters.FilterSet):
     comment_maintask_id = NumberFilter(field_name="comment_maintask_id")
     image = CharFilter(lookup_expr='iexact')
 
-
     class Meta:
         model = ImageMainTaskComment
+        fields = ['id', 'comment_maintask_id']
+
+class MainTaskCommentFileFilter(rest_filters.FilterSet):
+    """Class MainTaskCommentFileFilter"""
+
+    id = NumberFilter(field_name="id")
+    comment_maintask_id = NumberFilter(field_name="comment_maintask_id")
+    file = CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = FileMainTaskComment
         fields = ['id', 'comment_maintask_id']
 
 class SubTaskCommentImageFilter(rest_filters.FilterSet):
@@ -159,9 +206,19 @@ class SubTaskCommentImageFilter(rest_filters.FilterSet):
     comment_subtask_id = NumberFilter(field_name="comment_subtask_id")
     image = CharFilter(lookup_expr='iexact')
 
-
     class Meta:
         model = ImageSubTaskComment
+        fields = ['id', 'comment_subtask_id']
+
+class SubTaskCommentFileFilter(rest_filters.FilterSet):
+    """Class SubTaskCommentFileFilter"""
+
+    id = NumberFilter(field_name="id")
+    comment_subtask_id = NumberFilter(field_name="comment_subtask_id")
+    file = CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = FileSubTaskComment
         fields = ['id', 'comment_subtask_id']
 
 class PushNotificationFilter(rest_filters.FilterSet):
