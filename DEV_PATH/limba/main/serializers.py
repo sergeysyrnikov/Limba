@@ -24,6 +24,11 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    UploadFileMainTask,
+    UploadFileSubTask,
+    UploadFileObject,
+    FileMainTaskComment,
+    FileSubTaskComment,
 )
 
 UserModel = get_user_model()
@@ -255,3 +260,83 @@ class PushNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PushNotification
         fields = '__all__'
+
+class UploadFileMainTaskSerializer(serializers.ModelSerializer):
+    """Class UploadFileMainTask Serializer"""
+
+    class Meta:
+        model = UploadFileMainTask
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'task': instance.task.id,
+            'datetime': instance.datetime
+        }
+
+class UploadFileSubTaskSerializer(serializers.ModelSerializer):
+    """Class UploadFileSubTask Serializer"""
+
+    class Meta:
+        model = UploadFileSubTask
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'subtask': instance.subtask.id,
+            'datetime': instance.datetime
+        }
+
+class UploadFileObjectSerializer(serializers.ModelSerializer):
+    """Class UploadFileObject Serializer"""
+
+    class Meta:
+        model = UploadFileObject
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'object': instance.object.id,
+            'datetime': instance.datetime
+        }
+
+class FileMainTaskCommentSerializer(serializers.ModelSerializer):
+    """Class FileMainTaskComment Serializer"""
+
+    class Meta:
+        model = FileMainTaskComment
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'comment_maintask': instance.comment_maintask.id,
+            'datetime': instance.datetime
+        }
+
+class FileSubTaskCommentSerializer(serializers.ModelSerializer):
+    """Class FileSubTaskComment Serializer"""
+
+    class Meta:
+        model = FileSubTaskComment
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'comment_subtask': instance.comment_subtask.id,
+            'datetime': instance.datetime
+        }
