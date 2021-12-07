@@ -272,6 +272,7 @@ class UploadFileMainTaskSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name_file': instance.name_file,
+            'size': instance.size,
             'file_url': unquote(instance.file.url),
             'task': instance.task.id,
             'datetime': instance.datetime
@@ -288,6 +289,7 @@ class UploadFileSubTaskSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name_file': instance.name_file,
+            'size': instance.size,
             'file_url': unquote(instance.file.url),
             'subtask': instance.subtask.id,
             'datetime': instance.datetime
@@ -304,6 +306,7 @@ class UploadFileObjectSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name_file': instance.name_file,
+            'size': instance.size,
             'file_url': unquote(instance.file.url),
             'object': instance.object.id,
             'datetime': instance.datetime
@@ -320,6 +323,7 @@ class FileMainTaskCommentSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name_file': instance.name_file,
+            'size': instance.size,
             'file_url': unquote(instance.file.url),
             'comment_maintask': instance.comment_maintask.id,
             'datetime': instance.datetime
@@ -336,6 +340,7 @@ class FileSubTaskCommentSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name_file': instance.name_file,
+            'size': instance.size,
             'file_url': unquote(instance.file.url),
             'comment_subtask': instance.comment_subtask.id,
             'datetime': instance.datetime
