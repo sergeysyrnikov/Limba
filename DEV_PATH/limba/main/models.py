@@ -329,6 +329,7 @@ class FileMainTaskComment(models.Model):
         db_table = 'files_maintask_comment'
 
     name_file = models.CharField(max_length = 50)
+    size = models.IntegerField(default=0)
     comment_maintask = models.ForeignKey(MainTaskComment, related_name='files_maintask_comment', on_delete=models.CASCADE, null=True)
     file = models.FileField(upload_to = upload_path_files_maintask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -376,6 +377,7 @@ class FileSubTaskComment(models.Model):
         db_table = 'files_subtask_comment'
 
     name_file = models.CharField(max_length = 50)
+    size = models.IntegerField(default=0)
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True)
     file = models.FileField(upload_to = upload_path_files_subtask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -411,6 +413,7 @@ class UploadFileMainTask(models.Model):
 
     task = models.ForeignKey(MainTask, related_name='maintask_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
+    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_maintask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -427,6 +430,7 @@ class UploadFileSubTask(models.Model):
 
     subtask = models.ForeignKey(SubTask, related_name='subtask_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
+    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_subtask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -443,6 +447,7 @@ class UploadFileObject(models.Model):
 
     object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
+    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_to_object)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
