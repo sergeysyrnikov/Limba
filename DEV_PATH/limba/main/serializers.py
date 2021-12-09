@@ -157,12 +157,29 @@ class UserInfoSerialiser(serializers.ModelSerializer):
         model = UserAdditionalInfo
         fields = '__all__'
 
+class UploadFileObjectSerializer(serializers.ModelSerializer):
+    """Class UploadFileObject Serializer"""
+
+    class Meta:
+        model = UploadFileObject
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name_file': instance.name_file,
+            'file_url': unquote(instance.file.url),
+            'object': instance.object.id,
+            'datetime': instance.datetime
+        }
+
 class ObjectSerializer(serializers.ModelSerializer):
     """Class Object Serializer"""
 
     user = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     object_img = ImageObjectSerializer(many = True, read_only=True)
+    object_file = UploadFileObjectSerializer(many = True, read_only=True)
 
     class Meta:
         model = Object
@@ -290,22 +307,6 @@ class UploadFileSubTaskSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'subtask': instance.subtask.id,
-            'datetime': instance.datetime
-        }
-
-class UploadFileObjectSerializer(serializers.ModelSerializer):
-    """Class UploadFileObject Serializer"""
-
-    class Meta:
-        model = UploadFileObject
-        fields = '__all__'
-    
-    def to_representation(self, instance):
-        return {
-            'id': instance.id,
-            'name_file': instance.name_file,
-            'file_url': unquote(instance.file.url),
-            'object': instance.object.id,
             'datetime': instance.datetime
         }
 
