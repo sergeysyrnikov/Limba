@@ -160,6 +160,8 @@ class UserInfoSerialiser(serializers.ModelSerializer):
 class UploadFileObjectSerializer(serializers.ModelSerializer):
     """Class UploadFileObject Serializer"""
 
+    # datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
     class Meta:
         model = UploadFileObject
         fields = '__all__'
@@ -170,7 +172,7 @@ class UploadFileObjectSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'object': instance.object.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class ObjectSerializer(serializers.ModelSerializer):

@@ -13,7 +13,6 @@ from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
 import pandas as pd
 import pdfkit
-from docx2pdf import convert
 import threading
 import subprocess
 # from .managers import CustomUserManager
