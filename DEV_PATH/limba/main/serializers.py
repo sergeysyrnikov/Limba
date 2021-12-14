@@ -180,7 +180,7 @@ class ObjectSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     object_img = ImageObjectSerializer(many = True, read_only=True)
-    object_files = UploadFileObjectSerializer(many = True, read_only=True)
+    object_file = UploadFileObjectSerializer(many = True, read_only=True)
 
     class Meta:
         model = Object
