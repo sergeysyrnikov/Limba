@@ -9,10 +9,10 @@ import os
 from os.path import join
 import shutil
 import glob
-import pandas as pd
-import pdfkit
-import threading
-import subprocess
+# import pandas as pd
+# import pdfkit
+# import threading
+# import subprocess
 # from .managers import CustomUserManager
 
 """Function create folder"""
@@ -102,33 +102,33 @@ def upload_path_files_subtask_comment(self, filename):
         last_index = 10
     return '/'.join(['filesSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
 
-"""Function convert xls file"""
+# """Function convert xls file"""
 
-def convert_file_xls(path):
-    try:
-        cur_path = path
-        index = cur_path.index(".", len(cur_path) - 5)
-        cur_path = cur_path[0:index]
-        df = pd.read_excel(path)
-        df.to_html(cur_path + ".html")
-        pdfkit.from_file(cur_path + ".html", cur_path + ".pdf")
-        os.remove(cur_path + ".html")
-    except Exception as ex:
-        print(ex)
+# def convert_file_xls(path):
+#     try:
+#         cur_path = path
+#         index = cur_path.index(".", len(cur_path) - 5)
+#         cur_path = cur_path[0:index]
+#         df = pd.read_excel(path)
+#         df.to_html(cur_path + ".html")
+#         pdfkit.from_file(cur_path + ".html", cur_path + ".pdf")
+#         os.remove(cur_path + ".html")
+#     except Exception as ex:
+#         print(ex)
 
-"""Function convert doc file"""
+# """Function convert doc file"""
 
-def convert_file_doc(path):
-    try:
-        print(path)
-        cur_path = path
-        index = cur_path.index(".", len(cur_path) - 5)
-        cur_path = cur_path[0:index]
-        lst = cur_path.split("/")
-        cur_path = cur_path.replace("/" + lst[len(lst)-1], "")
-        subprocess.run(["soffice", "--headless", "--convert-to", "pdf", path, "--outdir", cur_path])
-    except Exception as ex:
-        print(ex)
+# def convert_file_doc(path):
+#     try:
+#         print(path)
+#         cur_path = path
+#         index = cur_path.index(".", len(cur_path) - 5)
+#         cur_path = cur_path[0:index]
+#         lst = cur_path.split("/")
+#         cur_path = cur_path.replace("/" + lst[len(lst)-1], "")
+#         subprocess.run(["soffice", "--headless", "--convert-to", "pdf", path, "--outdir", cur_path])
+#     except Exception as ex:
+#         print(ex)
 
 
 """User model Limba"""
@@ -485,12 +485,12 @@ class UploadFileObject(models.Model):
     
     def save(self, *args, **kwargs):
         super(UploadFileObject, self).save(*args, **kwargs)
-        cur_path = self.file.path;
-        if ("xls" in cur_path):
-            thr = threading.Thread(target=convert_file_xls, args=(cur_path, ))
-            thr.start()
-        if ("doc" in cur_path):
-            convert_file_doc(cur_path)
+        # cur_path = self.file.path;
+        # if ("xls" in cur_path):
+        #     thr = threading.Thread(target=convert_file_xls, args=(cur_path, ))
+        #     thr.start()
+        # if ("doc" in cur_path):
+        #     convert_file_doc(cur_path)
 
     def __str__(self):
         return f"Id: {self.id}, Name file: {self.name_file}"

@@ -10,7 +10,4 @@ celery==5.0.5
 redis
 Pillow
 openpyxl
-xlrd
-pandas
-pdfkit
-wkhtmltopdf
+comtypes
