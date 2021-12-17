@@ -264,6 +264,7 @@ class MainTask(models.Model):
     location = models.CharField(_('Местоположение'), max_length=100, default="")
     is_active = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
+    object = models.CharField(_('Объект'), max_length=20, default='')
 
     def __str__(self):
         return f"Задача: {self.task_name}, Исполнитель: {self.executor_task}"

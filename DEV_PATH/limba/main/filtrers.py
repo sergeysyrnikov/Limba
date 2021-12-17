@@ -97,6 +97,9 @@ class TaskFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     subdepartment_id = NumberFilter(field_name="subdepartment_object_id")
     connected_workers = NumberFilter(field_name="connected_workers")
+    executor_task = NumberFilter(field_name="executor_task")
+    is_active = NumberFilter(field_name="is_active")
+    object = NumberFilter(field_name="object")
 
     class Meta:
         model = MainTask

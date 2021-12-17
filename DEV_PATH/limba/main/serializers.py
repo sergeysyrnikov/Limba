@@ -54,7 +54,7 @@ class ImageObjectSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'image_url': unquote(instance.image.url),
             'object': instance.object.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class ImageMainSerializer(serializers.ModelSerializer):
@@ -69,7 +69,7 @@ class ImageMainSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'image_url': unquote(instance.image.url),
             'task': instance.task.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class ImageSubTaskSerializer(serializers.ModelSerializer):
@@ -84,7 +84,7 @@ class ImageSubTaskSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'image_url': unquote(instance.image.url),
             'subtask': instance.subtask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class ImageMainTaskCommentSerializer(serializers.ModelSerializer):
@@ -99,7 +99,7 @@ class ImageMainTaskCommentSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'image_url': unquote(instance.image.url),
             'comment_maintask': instance.comment_maintask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class ImageSubTaskCommentSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class ImageSubTaskCommentSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'image_url': unquote(instance.image.url),
             'comment_subtask': instance.comment_subtask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class UserSerializer(serializers.ModelSerializer):
@@ -293,7 +293,7 @@ class UploadFileMainTaskSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'task': instance.task.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class UploadFileSubTaskSerializer(serializers.ModelSerializer):
@@ -309,7 +309,7 @@ class UploadFileSubTaskSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'subtask': instance.subtask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class FileMainTaskCommentSerializer(serializers.ModelSerializer):
@@ -325,7 +325,7 @@ class FileMainTaskCommentSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'comment_maintask': instance.comment_maintask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
 
 class FileSubTaskCommentSerializer(serializers.ModelSerializer):
@@ -341,5 +341,5 @@ class FileSubTaskCommentSerializer(serializers.ModelSerializer):
             'name_file': instance.name_file,
             'file_url': unquote(instance.file.url),
             'comment_subtask': instance.comment_subtask.id,
-            'datetime': instance.datetime
+            'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
