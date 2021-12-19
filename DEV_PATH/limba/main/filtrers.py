@@ -99,6 +99,7 @@ class TaskFilter(rest_filters.FilterSet):
     connected_workers = NumberFilter(field_name="connected_workers")
     executor_task = NumberFilter(field_name="executor_task")
     is_active = NumberFilter(field_name="is_active")
+    is_show_executor = NumberFilter(field_name="is_show_executor")
     object = NumberFilter(field_name="object")
 
     class Meta:
@@ -111,6 +112,10 @@ class SubTaskFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     maintask_id = NumberFilter(field_name="maintask_id")
     connected_workers = NumberFilter(field_name="connected_workers")
+    executor_task = NumberFilter(field_name="executor_task")
+    is_active = NumberFilter(field_name="is_active")
+    is_show_executor = NumberFilter(field_name="is_show_executor")
+    object = NumberFilter(field_name="object")
 
     class Meta:
         model = SubTask

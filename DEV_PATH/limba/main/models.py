@@ -263,6 +263,7 @@ class MainTask(models.Model):
     about = models.TextField(_('Подробности'), max_length=200, default="")
     location = models.CharField(_('Местоположение'), max_length=100, default="")
     is_active = models.BooleanField(default=True)
+    is_show_executor = models.BooleanField(default=False)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     object = models.CharField(_('Объект'), max_length=20, default='')
 
@@ -286,6 +287,8 @@ class SubTask(models.Model):
     about = models.TextField(_('Подробности'), max_length=200, default="")
     location = models.CharField(_('Местоположение'), max_length=100, default="")
     is_active = models.BooleanField(default=True)
+    is_show_executor = models.BooleanField(default=False)
+    object = models.CharField(_('Объект'), max_length=20, default='')
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
