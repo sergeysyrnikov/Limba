@@ -152,38 +152,38 @@ class PushNotification(admin.ModelAdmin):
     list_display = [f.name for f in PushNotification._meta.fields]
     list_filter = [f.name for f in PushNotification._meta.fields]
 
-@admin.register(FileSubTaskComment)
-class FileSubTaskComment(admin.ModelAdmin):
-    """Class FileSubTaskComment"""
+# @admin.register(FileSubTaskComment)
+# class FileSubTaskComment(admin.ModelAdmin):
+#     """Class FileSubTaskComment"""
 
-    list_display = [f.name for f in FileSubTaskComment._meta.fields]
-    list_filter = [f.name for f in FileSubTaskComment._meta.fields]
+#     list_display = [f.name for f in FileSubTaskComment._meta.fields]
+#     list_filter = [f.name for f in FileSubTaskComment._meta.fields]
 
-@admin.register(FileMainTaskComment)
-class FileMainTaskComment(admin.ModelAdmin):
-    """Class FileSubTaskComment"""
+# @admin.register(FileMainTaskComment)
+# class FileMainTaskComment(admin.ModelAdmin):
+#     """Class FileSubTaskComment"""
 
-    list_display = [f.name for f in FileMainTaskComment._meta.fields]
-    list_filter = [f.name for f in FileMainTaskComment._meta.fields]
+#     list_display = [f.name for f in FileMainTaskComment._meta.fields]
+#     list_filter = [f.name for f in FileMainTaskComment._meta.fields]
 
-"""Class FileMainTask admin"""    
+# """Class FileMainTask admin"""    
 
-@admin.register(UploadFileMainTask)
-class UploadFileMainTask(admin.ModelAdmin):
-    """Class UploadFileMainTask"""
+# @admin.register(UploadFileMainTask)
+# class UploadFileMainTask(admin.ModelAdmin):
+#     """Class UploadFileMainTask"""
 
-    list_display = [f.name for f in UploadFileMainTask._meta.fields]
-    list_filter = [f.name for f in UploadFileMainTask._meta.fields]
+#     list_display = [f.name for f in UploadFileMainTask._meta.fields]
+#     list_filter = [f.name for f in UploadFileMainTask._meta.fields]
 
 
-"""Class FileSubTask admin"""    
+# """Class FileSubTask admin"""    
 
-@admin.register(UploadFileSubTask)
-class UploadFileSubTask(admin.ModelAdmin):
-    """Class UploadFileSubTask"""
+# @admin.register(UploadFileSubTask)
+# class UploadFileSubTask(admin.ModelAdmin):
+#     """Class UploadFileSubTask"""
 
-    list_display = [f.name for f in UploadFileSubTask._meta.fields]
-    list_filter = [f.name for f in UploadFileSubTask._meta.fields]
+#     list_display = [f.name for f in UploadFileSubTask._meta.fields]
+#     list_filter = [f.name for f in UploadFileSubTask._meta.fields]
 
 """Class FileObject admin"""    
 

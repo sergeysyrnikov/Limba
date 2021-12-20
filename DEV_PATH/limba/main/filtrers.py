@@ -22,12 +22,6 @@ from .models import (
     FileSubTaskComment,
 )
 
-class UserMainFilter(rest_filters.FilterSet):
-    """Class UserMainFilter"""
-
-    id = NumberFilter(field_name="id")
-    email = CharFilter(lookup_expr='iexact')
-
 class UserFilter(rest_filters.FilterSet):
     """Class UserFilter"""
 
@@ -103,7 +97,10 @@ class TaskFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     subdepartment_id = NumberFilter(field_name="subdepartment_object_id")
     connected_workers = NumberFilter(field_name="connected_workers")
-    object = CharFilter(lookup_expr='iexact')
+    executor_task = NumberFilter(field_name="executor_task")
+    is_active = NumberFilter(field_name="is_active")
+    is_show_executor = NumberFilter(field_name="is_show_executor")
+    object = NumberFilter(field_name="object")
 
     class Meta:
         model = MainTask
@@ -115,6 +112,10 @@ class SubTaskFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     maintask_id = NumberFilter(field_name="maintask_id")
     connected_workers = NumberFilter(field_name="connected_workers")
+    executor_task = NumberFilter(field_name="executor_task")
+    is_active = NumberFilter(field_name="is_active")
+    is_show_executor = NumberFilter(field_name="is_show_executor")
+    object = NumberFilter(field_name="object")
 
     class Meta:
         model = SubTask
@@ -126,7 +127,6 @@ class MainTaskImageFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     task_id = NumberFilter(field_name="task_id")
     image = CharFilter(lookup_expr='iexact')
-
 
     class Meta:
         model = ImageMain
@@ -192,7 +192,6 @@ class MainTaskCommentImageFilter(rest_filters.FilterSet):
     comment_maintask_id = NumberFilter(field_name="comment_maintask_id")
     image = CharFilter(lookup_expr='iexact')
 
-
     class Meta:
         model = ImageMainTaskComment
         fields = ['id', 'comment_maintask_id']
@@ -214,7 +213,6 @@ class SubTaskCommentImageFilter(rest_filters.FilterSet):
     id = NumberFilter(field_name="id")
     comment_subtask_id = NumberFilter(field_name="comment_subtask_id")
     image = CharFilter(lookup_expr='iexact')
-
 
     class Meta:
         model = ImageSubTaskComment

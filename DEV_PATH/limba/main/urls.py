@@ -44,11 +44,11 @@ router.register('subtask-images', ImageSubTaskView)
 router.register('maintask-comment-images', ImageMainTaskCommentView)
 router.register('subtask-comment-images', ImageSubTaskCommentView)
 router.register('push-notifications', PushNotificationView)
-router.register('maintask-files', UploadFileMainTaskView)
-router.register('subtask-files', UploadFileSubTaskView)
+# router.register('maintask-files', UploadFileMainTaskView)
+# router.register('subtask-files', UploadFileSubTaskView)
 router.register('object-files', UploadFileObjectView)
-router.register('maintask-comment-files', UploadFileMaintaskCommentView)
-router.register('subtask-comment-files', UploadFileSubtaskCommentView)
+# router.register('maintask-comment-files', UploadFileMaintaskCommentView)
+# router.register('subtask-comment-files', UploadFileSubtaskCommentView)
 
 urlpatterns = [
     path('tokens/', MyTokenObtainPairView.as_view()),

@@ -9,6 +9,8 @@ import os
 from os.path import join
 import shutil
 import glob
+from PIL import Image
+# from django.core.exceptions import ObjectDoesNotExist
 # import pandas as pd
 # import pdfkit
 # import threading
@@ -45,6 +47,11 @@ def _delete_file(path):
 def upload_path_object(self, filename):
     return '/'.join(['imageObject', str(self.object.code), str(self.object.shortname), filename])
 
+"""Path uploading object files"""
+
+def upload_path_files_to_object(self, filename):
+    return '/'.join(['filesObject', str(self.object.code), str(self.object.shortname), filename])
+
 """Path uploading main imgs"""
 
 def upload_path_main(self, filename):
@@ -70,11 +77,6 @@ def upload_path_sub_comment(self, filename):
     if (last_index > 10):
         last_index = 10
     return '/'.join(['imageSubTask', str(self.comment_subtask.subtask.full_link).replace(" ", "").replace("|", "/"), str(self.comment_subtask.subtask.task_name), 'Комментарий #' + str(self.comment_subtask.id) + '(' + self.comment_subtask.comment[0:last_index] + ')', filename])
-
-"""Path uploading object files"""
-
-def upload_path_files_to_object(self, filename):
-    return '/'.join(['filesObject', str(self.object.code), str(self.object.shortname), filename])
 
 """Path uploading files maintask"""
 
@@ -130,7 +132,6 @@ def upload_path_files_subtask_comment(self, filename):
 #     except Exception as ex:
 #         print(ex)
 
-
 """User model Limba"""
 
 class User(AbstractUser):
@@ -161,7 +162,6 @@ class UserAdditionalInfo(models.Model):
     abbreviation = models.CharField(_('Аббревиатура ФИО'), max_length=3, blank=False, default="")
     position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=6)
     type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=2)
-    type_system = models.DecimalField(_('Тип системы'), max_digits=1 ,decimal_places=0 ,default=0)
     code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="")
     index_color = models.DecimalField(_('Цвет иконки пользователя'), max_digits=1 ,decimal_places=0 ,default=0)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -260,10 +260,11 @@ class MainTask(models.Model):
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
     executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True)
-    about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
-    object = models.DecimalField(_('Объект'), max_digits=6, decimal_places=0, default=999999)
-    location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
+    about = models.TextField(_('Подробности'), max_length=200, default="")
+    location = models.CharField(_('Местоположение'), max_length=100, default="")
     is_active = models.BooleanField(default=True)
+    is_show_executor = models.BooleanField(default=False)
+    object = models.CharField(_('Объект'), max_length=10, default='')
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -283,9 +284,11 @@ class SubTask(models.Model):
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
     executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True)
-    about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
-    location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
+    about = models.TextField(_('Подробности'), max_length=200, default="")
+    location = models.CharField(_('Местоположение'), max_length=100, default="")
     is_active = models.BooleanField(default=True)
+    is_show_executor = models.BooleanField(default=False)
+    object = models.CharField(_('Объект'), max_length=10, default='')
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -361,7 +364,6 @@ class FileMainTaskComment(models.Model):
         db_table = 'files_maintask_comment'
 
     name_file = models.CharField(max_length = 50)
-    size = models.IntegerField(default=0)
     comment_maintask = models.ForeignKey(MainTaskComment, related_name='files_maintask_comment', on_delete=models.CASCADE, null=True)
     file = models.FileField(upload_to = upload_path_files_maintask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -409,7 +411,6 @@ class FileSubTaskComment(models.Model):
         db_table = 'files_subtask_comment'
 
     name_file = models.CharField(max_length = 50)
-    size = models.IntegerField(default=0)
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True)
     file = models.FileField(upload_to = upload_path_files_subtask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -445,7 +446,6 @@ class UploadFileMainTask(models.Model):
 
     task = models.ForeignKey(MainTask, related_name='maintask_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
-    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_maintask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -462,7 +462,6 @@ class UploadFileSubTask(models.Model):
 
     subtask = models.ForeignKey(SubTask, related_name='subtask_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
-    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_subtask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -479,18 +478,8 @@ class UploadFileObject(models.Model):
 
     object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True)
     name_file = models.CharField(max_length = 50)
-    size = models.IntegerField(default=0)
     file = models.FileField(upload_to = upload_path_files_to_object)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
-    
-    def save(self, *args, **kwargs):
-        super(UploadFileObject, self).save(*args, **kwargs)
-        # cur_path = self.file.path;
-        # if ("xls" in cur_path):
-        #     thr = threading.Thread(target=convert_file_xls, args=(cur_path, ))
-        #     thr.start()
-        # if ("doc" in cur_path):
-        #     convert_file_doc(cur_path)
 
     def __str__(self):
         return f"Id: {self.id}, Name file: {self.name_file}"
