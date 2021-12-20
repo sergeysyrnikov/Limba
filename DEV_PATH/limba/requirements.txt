@@ -3,6 +3,7 @@ psycopg2-binary
 gunicorn
 gevent
 djangorestframework
+djangorestframework-simplejwt
 django-filter
 django-cors-headers
 djoser

@@ -53,7 +53,6 @@ from .filtrers import (
     MainTaskCommentFilter,
     SubTaskCommentFilter,
     UserFilter,
-    UserMainFilter,
     PushNotificationFilter,
     ObjectFileFilter,
     MainTaskFileFilter,
@@ -106,8 +105,9 @@ class UserView(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_class = UserMainFilter
+    # filter_backends = (DjangoFilterBackend, )
+    # filter_class = UserFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationUsers
 
     def create(self, request, *args, **kwargs):
@@ -139,6 +139,7 @@ class UserInfoView(ModelViewSet):
     serializer_class = UserInfoSerialiser
     filter_backends = (DjangoFilterBackend, )
     filter_class = UserFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationUsersInfo
 
 class ObjectView(ModelViewSet):
@@ -148,6 +149,7 @@ class ObjectView(ModelViewSet):
     serializer_class = ObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationObjects
 
 class ImageObjectView(ModelViewSet):
@@ -157,6 +159,7 @@ class ImageObjectView(ModelViewSet):
     serializer_class = ImageObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectImageFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTaskComments
 
 class DepartmentView(ModelViewSet):
@@ -166,6 +169,7 @@ class DepartmentView(ModelViewSet):
     serializer_class = DepartmentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = DepartmentFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationDepartments
 
 class SubDepartmentObjectView(ModelViewSet):
@@ -175,6 +179,7 @@ class SubDepartmentObjectView(ModelViewSet):
     serializer_class = SubDepartmentObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubDepartmentFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubDepartments
 
 class MainTaskView(ModelViewSet):
@@ -184,6 +189,7 @@ class MainTaskView(ModelViewSet):
     serializer_class = MainTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = TaskFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationMainTasks
 
 class SubTaskView(ModelViewSet):
@@ -193,6 +199,7 @@ class SubTaskView(ModelViewSet):
     serializer_class = SubTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTasks
 
 class MainTaskCommentView(ModelViewSet):
@@ -202,6 +209,7 @@ class MainTaskCommentView(ModelViewSet):
     serializer_class = MainTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MainTaskCommentFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationMainTaskComments
 
 class SubTaskCommentView(ModelViewSet):
@@ -211,6 +219,7 @@ class SubTaskCommentView(ModelViewSet):
     serializer_class = SubTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskCommentFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTaskComments
 
 class ImageMainView(ModelViewSet):
@@ -220,6 +229,7 @@ class ImageMainView(ModelViewSet):
     serializer_class = ImageMainSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MainTaskImageFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationMainTaskImgs
 
 class ImageSubTaskView(ModelViewSet):
@@ -229,6 +239,7 @@ class ImageSubTaskView(ModelViewSet):
     serializer_class = ImageSubTaskSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskImageFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTaskComments
 
 class ImageMainTaskCommentView(ModelViewSet):
@@ -238,6 +249,7 @@ class ImageMainTaskCommentView(ModelViewSet):
     serializer_class = ImageMainTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MainTaskCommentImageFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTaskComments
 
 class ImageSubTaskCommentView(ModelViewSet):
@@ -247,6 +259,7 @@ class ImageSubTaskCommentView(ModelViewSet):
     serializer_class = ImageSubTaskCommentSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskCommentImageFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationSubTaskComments
 
 class PushNotificationView(ModelViewSet):
@@ -256,6 +269,7 @@ class PushNotificationView(ModelViewSet):
     serializer_class = PushNotificationSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationFilter
+    permission_classes = (IsAuthenticated,)
 
 class ChangePasswordView(generics.UpdateAPIView):
         """
@@ -263,7 +277,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         """
         serializer_class = ChangePasswordSerializer
         model = User
-        # permission_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated,)
 
         def update(self, request, *args, **kwargs):
             serializer = self.get_serializer(data=request.data)
@@ -286,21 +300,22 @@ class ChangePasswordView(generics.UpdateAPIView):
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UploadFileMainTaskView(ModelViewSet):
-    """Class UploadFileMainTaskView"""
+# class UploadFileMainTaskView(ModelViewSet):
+#     """Class UploadFileMainTaskView"""
 
-    queryset = UploadFileMainTask.objects.all()
-    serializer_class = UploadFileMainTaskSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_class = MainTaskFileFilter
+#     queryset = UploadFileMainTask.objects.all()
+#     serializer_class = UploadFileMainTaskSerializer
+#     filter_backends = (DjangoFilterBackend, )
+#     filter_class = MainTaskFileFilter
+#     permission_classes = (IsAuthenticated,)
 
-class UploadFileSubTaskView(ModelViewSet):
-    """Class UploadFileSubTaskView"""
+# class UploadFileSubTaskView(ModelViewSet):
+#     """Class UploadFileSubTaskView"""
 
-    queryset = UploadFileSubTask.objects.all()
-    serializer_class = UploadFileSubTaskSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_class = SubTaskFileFilter
+#     queryset = UploadFileSubTask.objects.all()
+#     serializer_class = UploadFileSubTaskSerializer
+#     filter_backends = (DjangoFilterBackend, )
+#     filter_class = SubTaskFileFilter
 
 class UploadFileObjectView(ModelViewSet):
     """Class UploadFileSubTaskView"""
@@ -309,22 +324,23 @@ class UploadFileObjectView(ModelViewSet):
     serializer_class = UploadFileObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectFileFilter
+    permission_classes = (IsAuthenticated,)
 
-class UploadFileMaintaskCommentView(ModelViewSet):
-    """Class UploadFileMaintaskCommentView"""
+# class UploadFileMaintaskCommentView(ModelViewSet):
+#     """Class UploadFileMaintaskCommentView"""
 
-    queryset = FileMainTaskComment.objects.all()
-    serializer_class = FileMainTaskCommentSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_class = MainTaskCommentFileFilter
+#     queryset = FileMainTaskComment.objects.all()
+#     serializer_class = FileMainTaskCommentSerializer
+#     filter_backends = (DjangoFilterBackend, )
+#     filter_class = MainTaskCommentFileFilter
 
-class UploadFileSubtaskCommentView(ModelViewSet):
-    """Class UploadFileSubtaskCommentView"""
+# class UploadFileSubtaskCommentView(ModelViewSet):
+#     """Class UploadFileSubtaskCommentView"""
 
-    queryset = FileSubTaskComment.objects.all()
-    serializer_class = FileSubTaskCommentSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_class = SubTaskCommentFileFilter
+#     queryset = FileSubTaskComment.objects.all()
+#     serializer_class = FileSubTaskCommentSerializer
+#     filter_backends = (DjangoFilterBackend, )
+#     filter_class = SubTaskCommentFileFilter
 
 # def activate(request, uidb64, token):
 #     try:
