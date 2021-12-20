@@ -116,6 +116,7 @@ class SubTaskFilter(rest_filters.FilterSet):
     is_active = NumberFilter(field_name="is_active")
     is_show_executor = NumberFilter(field_name="is_show_executor")
     object = NumberFilter(field_name="object")
+    subdepartment_object = NumberFilter(field_name="subdepartment_object")
 
     class Meta:
         model = SubTask
