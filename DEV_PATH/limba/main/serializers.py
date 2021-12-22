@@ -24,6 +24,7 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    PushNotificationUser,
     UploadFileMainTask,
     UploadFileSubTask,
     UploadFileObject,
@@ -278,6 +279,13 @@ class PushNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PushNotification
+        fields = '__all__'
+
+class PushNotificationUserSerializer(serializers.ModelSerializer):
+    """Class PushNotificationUser Serializer"""
+
+    class Meta:
+        model = PushNotificationUser
         fields = '__all__'
 
 class UploadFileMainTaskSerializer(serializers.ModelSerializer):

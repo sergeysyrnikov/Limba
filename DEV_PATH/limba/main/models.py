@@ -439,6 +439,23 @@ class PushNotification(models.Model):
     def __str__(self):
         return f"Id: {self.id}, Title: {self.title}"
 
+"""PushNotificationsUser model Limba"""
+
+class PushNotificationUser(models.Model):
+    """Class PushNotificationUser"""
+  
+    class Meta:
+        db_table = 'push_notifications_user'
+
+    user = models.ForeignKey(User, related_name='user_push', on_delete=models.CASCADE, null=True)
+    title = models.CharField(_('Заголовок'), max_length=200, default="")
+    body = models.CharField(_('Сообщение'), max_length=400, default="")
+    data = models.CharField(_('Данные'), max_length=600, default="")
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def __str__(self):
+        return f"Id: {self.id}, Title: {self.title}"
+
 """Files model file maintask"""
 
 class UploadFileMainTask(models.Model):

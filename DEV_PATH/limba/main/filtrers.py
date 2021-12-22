@@ -15,6 +15,7 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    PushNotificationUser,
     UploadFileMainTask,
     UploadFileSubTask,
     UploadFileObject,
@@ -239,3 +240,13 @@ class PushNotificationFilter(rest_filters.FilterSet):
     class Meta:
         model = PushNotification
         fields = ['id', 'type']
+
+class PushNotificationUserFilter(rest_filters.FilterSet):
+    """Class PushNotificationUserFilter"""
+
+    id = NumberFilter(field_name="id")
+    user = NumberFilter(field_name="user")
+
+    class Meta:
+        model = PushNotificationUser
+        fields = ['id', 'user']

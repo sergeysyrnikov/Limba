@@ -18,6 +18,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import render
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import (
+    PushNotificationUser,
     SubTaskComment, 
     SubTask, 
     Department, 
@@ -33,11 +34,7 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
-    UploadFileMainTask,
-    UploadFileSubTask,
     UploadFileObject,
-    FileMainTaskComment,
-    FileSubTaskComment,
 )
 from .filtrers import (
     MainTaskCommentImageFilter,
@@ -54,11 +51,8 @@ from .filtrers import (
     SubTaskCommentFilter,
     UserFilter,
     PushNotificationFilter,
+    PushNotificationUserFilter,
     ObjectFileFilter,
-    MainTaskFileFilter,
-    SubTaskFileFilter,
-    MainTaskCommentFileFilter,
-    SubTaskCommentFileFilter,
 )
 
 from .service import (
@@ -76,6 +70,7 @@ from .service import (
 )
 
 from .serializers import (
+    PushNotificationUserSerializer,
     UserSerializer,
     ObjectSerializer,
     ImageObjectSerializer,
@@ -269,6 +264,15 @@ class PushNotificationView(ModelViewSet):
     serializer_class = PushNotificationSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationFilter
+    permission_classes = (IsAuthenticated,)
+
+class PushNotificationUserView(ModelViewSet):
+    """Class PushNotificationUserView"""
+
+    queryset = PushNotificationUser.objects.all()
+    serializer_class = PushNotificationUserSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = PushNotificationUserFilter
     permission_classes = (IsAuthenticated,)
 
 class ChangePasswordView(generics.UpdateAPIView):

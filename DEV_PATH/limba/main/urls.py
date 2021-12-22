@@ -18,6 +18,7 @@ from .views import (
     ImageSubTaskCommentView,
     MyTokenObtainPairView,
     PushNotificationView,
+    PushNotificationUserView,
     ChangePasswordView,
     # UploadFileMaintaskCommentView,
     UploadFileObjectView,
@@ -44,6 +45,7 @@ router.register('subtask-images', ImageSubTaskView)
 router.register('maintask-comment-images', ImageMainTaskCommentView)
 router.register('subtask-comment-images', ImageSubTaskCommentView)
 router.register('push-notifications', PushNotificationView)
+router.register('push-notifications-user', PushNotificationUserView)
 # router.register('maintask-files', UploadFileMainTaskView)
 # router.register('subtask-files', UploadFileSubTaskView)
 router.register('object-files', UploadFileObjectView)
