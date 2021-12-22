@@ -27,6 +27,8 @@ from .views import (
     # UploadFileMainTaskView, 
     home,
     code,
+    push,
+    users,
 )
 
 router = routers.DefaultRouter()
@@ -59,5 +61,7 @@ urlpatterns = [
     # path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('home/', home, name="home"),
     path('code/', code, name="code"), 
+    path('users-code/', users, name="users"), 
+    path('push-create/', push, name="push"), 
     path('', include(router.urls))
 ]

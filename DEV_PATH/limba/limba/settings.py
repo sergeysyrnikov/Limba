@@ -130,8 +130,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1825),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1825),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=3),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
 }
 
 REDIS_HOST = 'localhost'

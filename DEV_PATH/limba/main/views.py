@@ -3,8 +3,13 @@ from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions 
 from rest_framework import generics
+import json
+from django.forms.models import model_to_dict
+from django.core import serializers
+from rest_framework.decorators import action
 
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.utils.encoding import force_bytes
@@ -102,7 +107,7 @@ class UserView(ModelViewSet):
     serializer_class = UserSerializer
     # filter_backends = (DjangoFilterBackend, )
     # filter_class = UserFilter
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated)
     # pagination_class = PaginationUsers
 
     def create(self, request, *args, **kwargs):
@@ -118,6 +123,11 @@ class UserView(ModelViewSet):
             'last_name': instance['last_name']
         })
     
+    # def get_permissions(self):
+    #     if self.request.method in ['PUT', 'DELETE', 'POST']:
+    #         return [permissions.IsAuthenticated()]
+    #     return [permissions.]
+
     # @action(detail=True, methods=['post'])
     # def set_active(self, request, pk=None):
     #     user = self.get_object()
@@ -266,6 +276,13 @@ class PushNotificationView(ModelViewSet):
     filter_class = PushNotificationFilter
     permission_classes = (IsAuthenticated,)
 
+    # @action(detail=True, methods=['post'])
+    # def set_active(self, request, pk=None):
+    #     user = self.get_object()
+    #     print("Lsdfldsfdsf")
+    #     print(user)
+    
+
 class PushNotificationUserView(ModelViewSet):
     """Class PushNotificationUserView"""
 
@@ -362,6 +379,8 @@ class UploadFileObjectView(ModelViewSet):
 def home(request):
     return render(request, 'main/home_limba.html', {})
 
+
+
 @api_view(["POST"])
 @csrf_exempt 
 def code(request):
@@ -381,6 +400,44 @@ def code(request):
                 mail_subject, message, to=[email]
             )
             email.send() 
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
+
+@api_view(["GET"])
+@csrf_exempt 
+def users(request):
+    try:
+        if request.method == "GET":
+            code = request.data["code"]
+            print(code)
+            if (code == "34ubitaV"):
+                ser = [{ "email": el.username } for el in User.objects.all()]
+                return HttpResponse(ser, content_type='application/json')
+            else:
+                return HttpResponse("")
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
+
+@api_view(["POST"])
+@csrf_exempt 
+def push(request):
+    try:
+        if request.method == "POST":
+            code = request.data["code"]
+            print(code)
+            if (code == "34ubitaV"):
+                PushNotification.objects.create(
+                    title = request.data["title"],
+                    body = request.data["body"],
+                    data = request.data["data"],
+                    type = request.data["type"]
+                )
+                print("Good!")
+                return HttpResponse("")
+            else:
+                return HttpResponse("")
     except Exception as ex:
         print(ex)
     return HttpResponse("")
