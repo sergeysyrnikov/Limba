@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
@@ -404,18 +405,23 @@ def code(request):
         print(ex)
     return HttpResponse("")
 
-@api_view(["GET"])
+@api_view(["POST"])
 @csrf_exempt 
 def users(request):
     try:
-        if request.method == "GET":
+        if request.method == "POST":
             code = request.data["code"]
+            is_info = request.data["is_info"]
             print(code)
-            if (code == "34ubitaV"):
-                ser = [{ "email": el.username } for el in User.objects.all()]
-                return HttpResponse(ser, content_type='application/json')
+            if (code == "34ubitaV" and is_info):
+                ser = [{ "email": el.username, "id": el.id, "first_name": el.first_name, "second_name": el.last_name } for el in User.objects.filter(email=request.data["email"])]
+                return JsonResponse(ser, safe=False)
             else:
-                return HttpResponse("")
+                if (code == "34ubitaV"):
+                    ser = [{ "email": el.username, "id": el.id} for el in User.objects.all()]
+                    return JsonResponse(ser, safe=False)
+                else:
+                    return HttpResponse("")
     except Exception as ex:
         print(ex)
     return HttpResponse("")
