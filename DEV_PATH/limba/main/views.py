@@ -5,7 +5,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions 
 from rest_framework import generics
 import json
 from django.forms.models import model_to_dict
@@ -108,7 +107,7 @@ class UserView(ModelViewSet):
     serializer_class = UserSerializer
     # filter_backends = (DjangoFilterBackend, )
     # filter_class = UserFilter
-    permission_classes = (permissions.IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationUsers
 
     def create(self, request, *args, **kwargs):
@@ -387,20 +386,21 @@ def home(request):
 def code(request):
     try:
         if request.method == "POST":
-            code_reg = str(request.data["code"])
-            email = request.data["email"]
-            data = request.data["data"]
-            message = render_to_string('main/home_limba.html',
-            {
-                'email': email,
-                'code': code_reg,
-                'data': data
-            })
-            mail_subject = 'Активируйте свой аккаунт в Limba.'
-            email = EmailMessage(
-                mail_subject, message, to=[email]
-            )
-            email.send() 
+            if request.data["code_check"] == "34ubitaV":
+                code_reg = str(request.data["code"])
+                email = request.data["email"]
+                data = request.data["data"]
+                message = render_to_string('main/home_limba.html',
+                {
+                    'email': email,
+                    'code': code_reg,
+                    'data': data
+                })
+                mail_subject = 'Активируйте свой аккаунт в Limba.'
+                email = EmailMessage(
+                    mail_subject, message, to=[email]
+                )
+                email.send() 
     except Exception as ex:
         print(ex)
     return HttpResponse("")
@@ -442,6 +442,22 @@ def push(request):
                 )
                 print("Good!")
                 return HttpResponse("")
+            else:
+                return HttpResponse("")
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
+
+@api_view(["POST"])
+@csrf_exempt 
+def tokens(request):
+    try:
+        if request.method == "POST":
+            code = request.data["code"]
+            print(code)
+            if (code == "34ubitaV"):
+                ser = [{ "code_fcm": el.code_fcm, "type_system": el.type_system } for el in UserAdditionalInfo.objects.filter(user=request.data["id"])]
+                return JsonResponse(ser, safe=False)
             else:
                 return HttpResponse("")
     except Exception as ex:

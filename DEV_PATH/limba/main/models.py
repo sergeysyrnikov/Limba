@@ -434,6 +434,8 @@ class PushNotification(models.Model):
     data = models.CharField(_('Данные'), max_length=600, default="")
     type = models.DecimalField(_('Тип сообщения'), max_digits=1, decimal_places=0, default=0)
     is_active = models.BooleanField(default=True)
+    token_fcm = models.CharField(_('Токен fcm'), max_length=300, default="")
+    type_system = models.CharField(_('Тип устройства'), default="", max_length=1)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):

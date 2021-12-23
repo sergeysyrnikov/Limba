@@ -28,6 +28,7 @@ from .views import (
     home,
     code,
     push,
+    tokens,
     users,
 )
 
@@ -63,5 +64,6 @@ urlpatterns = [
     path('code/', code, name="code"), 
     path('users-code/', users, name="users"), 
     path('push-create/', push, name="push"), 
+    path('tokens-fcm/', tokens, name="tokens"), 
     path('', include(router.urls))
 ]
