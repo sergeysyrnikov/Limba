@@ -438,7 +438,9 @@ def push(request):
                     title = request.data["title"],
                     body = request.data["body"],
                     data = request.data["data"],
-                    type = request.data["type"]
+                    type = request.data["type"],
+                    token_fcm = request.data["token_fcm"],
+                    type_system = request.data["type_system"]
                 )
                 print("Good!")
                 return HttpResponse("")
