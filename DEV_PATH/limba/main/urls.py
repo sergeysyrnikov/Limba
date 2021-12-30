@@ -27,6 +27,7 @@ from .views import (
     # UploadFileMainTaskView, 
     home,
     code,
+    number_task_new,
     push,
     tokens,
     users,
@@ -64,6 +65,7 @@ urlpatterns = [
     path('code/', code, name="code"), 
     path('users-code/', users, name="users"), 
     path('push-create/', push, name="push"), 
+    path('number-tasks/', number_task_new, name="number_task_new"), 
     path('tokens-fcm/', tokens, name="tokens"), 
     path('', include(router.urls))
 ]
