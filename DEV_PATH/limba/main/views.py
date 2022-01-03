@@ -472,35 +472,69 @@ def number_task_new(request):
     try:
         if request.method == "POST":
             code = request.data["code"]
-            print(code)
+            # print(code)
             if (code == "34ubitaV"):
-                list = request.data["list_id"],
                 user_id = request.data["user"],
-                list = list[0]
-                objs = []
-                for el in list:
-                    objs.append(Object.objects.get(id=el))
-                number_tasks = []
-                new_task = []
-                print(objs)
-                for obj in objs:
-                    objs_task = MainTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id)
-                    objs_subtasks = SubTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id)
-                    objs_task_new = MainTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id, is_show_executor=False)
-                    if len(objs_task_new) > 0:
-                        new_task.append(True)
-                    else:
-                        objs_subtask_new = SubTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id, is_show_executor=False)
-                        if len(objs_subtask_new) > 0:
-                            new_task.append(True)
+                type_request = request.data["type"];
+                if type_request == 0:
+                    list = request.data["list_id"],
+                    list = list[0]
+                    objs = []
+                    for el in list:
+                        objs.append(Object.objects.get(id=el))
+                    number_tasks = []
+                    new_tasks = []
+                    for obj in objs:
+                        objs_task = MainTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id)
+                        objs_subtasks = SubTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id)
+                        objs_task_new = MainTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id, is_show_executor=False)
+                        if len(objs_task_new) > 0:
+                            new_tasks.append(True)
                         else:
-                            new_task.append(False)
-                    number_tasks.append(len(objs_task) + len(objs_subtasks))
-                print("Good!")
-                print(objs)
-                print(number_tasks)
-                print(new_task)
-                return HttpResponse("")
+                            objs_subtask_new = SubTask.objects.filter(executor_task=user_id, is_active = True, object=obj.id, is_show_executor=False)
+                            if len(objs_subtask_new) > 0:
+                                new_tasks.append(True)
+                            else:
+                                new_tasks.append(False)
+                        number_tasks.append(len(objs_task) + len(objs_subtasks))
+                    ser = {"number_tasks": number_tasks, "new_tasks": new_tasks}
+                    return JsonResponse(ser, safe=False)
+                elif type_request == 1:
+                    list = request.data["list_id"]
+                    list_number_tasks = []
+                    new_tasks = []
+                    k = 0
+                    for lst in list:
+                        print("Checking!")
+                        list_number_tasks.append([])
+                        new_tasks.append([])
+                        for el in lst:
+                            print("Id " + str(el))
+                            try:
+                                subdep_obj = SubDepartmentObject.objects.get(id=el)
+                                objs_task = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj)
+                                objs_subtasks = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj)
+                                objs_task_new = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj, is_show_executor=False)
+                                if len(objs_task_new) > 0:
+                                    new_tasks[k].append(True)
+                                else:
+                                    objs_subtask_new = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj, is_show_executor=False)
+                                    if len(objs_subtask_new) > 0:
+                                        new_tasks[k].append(True)
+                                    else:
+                                        new_tasks[k].append(False)
+                                list_number_tasks[k].append(len(objs_task) + len(objs_subtasks))
+                                
+                            except:
+                                list_number_tasks[k].append(0)
+                                new_tasks[k].append(False)
+                        k+=1
+                    print(list_number_tasks)
+                    print(new_tasks)
+                    ser = {"number_tasks": list_number_tasks, "new_tasks": new_tasks}
+                    return JsonResponse(ser, safe=False)
+                else:
+                    return HttpResponse("")
             else:
                 return HttpResponse("")
     except Exception as ex:

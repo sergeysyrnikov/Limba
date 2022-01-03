@@ -188,25 +188,28 @@ class ObjectSerializer(serializers.ModelSerializer):
         model = Object
         fields = '__all__'
 
-class DepartmentSerializer(serializers.ModelSerializer):
-    """Class Department Serializer"""
-
-    user_assign = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-    creator = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-
-    class Meta:
-        model = Department
-        fields = '__all__'
 
 class SubDepartmentObjectSerializer(serializers.ModelSerializer):
     """Class SubDepartmentObject Serializer"""
 
     user = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     creator = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-
+    
     class Meta:
         model = SubDepartmentObject
         fields = '__all__'
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    """Class Department Serializer"""
+
+    user_assign = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    creator = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    department = SubDepartmentObjectSerializer(many = True, read_only=True)
+
+    class Meta:
+        model = Department
+        fields = '__all__'
+
 
 class MainTaskSerializer(serializers.ModelSerializer):
     """Class MainTask Serializer"""
