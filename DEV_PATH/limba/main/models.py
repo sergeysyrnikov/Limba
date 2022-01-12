@@ -158,7 +158,7 @@ class UserAdditionalInfo(models.Model):
     class Meta:
         db_table = 'user_info'
 
-    user = models.ForeignKey(User, related_name='user_info', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, related_name='user_info', on_delete=models.CASCADE, null=True, db_constraint=False)
     abbreviation = models.CharField(_('Аббревиатура ФИО'), max_length=3, blank=False, default="")
     position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=6)
     type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=2)
@@ -179,7 +179,7 @@ class Object(models.Model):
     class Meta:
         db_table = 'objects'
 
-    user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True)
+    user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, unique=True, null=True) 
     shortname = models.CharField(_('Сокращённое имя объекта'), max_length=8, default='', unique=True) 
     fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='', blank=True)
@@ -203,7 +203,7 @@ class ImageObject(models.Model):
     class Meta:
         db_table = 'objectimage'
 
-    object = models.ForeignKey(Object, related_name='object_img', on_delete=models.CASCADE, null=True)
+    object = models.ForeignKey(Object, related_name='object_img', on_delete=models.CASCADE, null=True, db_constraint=False)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_object, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -215,9 +215,9 @@ class ImageObject(models.Model):
 class Department(models.Model):
     """Class BlogCategory"""
     
-    creator = models.ForeignKey(User, related_name='creator_department', on_delete=models.DO_NOTHING, null=True)
-    user_assign = models.ForeignKey(User, related_name='user_assign', on_delete=models.DO_NOTHING, null=True)
-    object_name = models.ForeignKey(Object, related_name='object', on_delete = models.CASCADE, null=True)
+    creator = models.ForeignKey(User, related_name='creator_department', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
+    user_assign = models.ForeignKey(User, related_name='user_assign', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
+    object_name = models.ForeignKey(Object, related_name='object', on_delete = models.CASCADE, null=True, db_constraint=False)
     fullname = models.CharField(_('Полное имя отдела'), max_length=30, default='')
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -233,9 +233,9 @@ class Department(models.Model):
 class SubDepartmentObject(models.Model):
     """Class BlogCategory"""
 
-    creator = models.ForeignKey(User, related_name='creator_subdepartment', on_delete=models.DO_NOTHING, null=True)    
-    department = models.ForeignKey(Department, related_name='department', on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, related_name='user_executor', on_delete=models.DO_NOTHING, null=True)
+    creator = models.ForeignKey(User, related_name='creator_subdepartment', on_delete=models.DO_NOTHING, null=True, db_constraint=False)    
+    department = models.ForeignKey(Department, related_name='department', on_delete=models.CASCADE, null=True, db_constraint=False)
+    user = models.ForeignKey(User, related_name='user_executor', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     fullname = models.CharField(_('Полное имя подобъекта'), max_length=30, default='')
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -254,14 +254,14 @@ class MainTask(models.Model):
     class Meta:
         db_table = 'maintasks'
 
-    subdepartment_object = models.ForeignKey(SubDepartmentObject, related_name='department_object', on_delete=models.CASCADE, null=True)
-    creator_task = models.ForeignKey(User, related_name='creator_task', on_delete=models.DO_NOTHING, null=True)
+    subdepartment_object = models.ForeignKey(SubDepartmentObject, related_name='department_object', on_delete=models.CASCADE, null=True, db_constraint=False)
+    creator_task = models.ForeignKey(User, related_name='creator_task', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     cols_subtasks = models.IntegerField(_('Колличество подзадач'), null=True, default=0)
     connected_workers = models.ManyToManyField(User, related_name='workers_main', blank=True)
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
-    executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True)
+    executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
     location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
@@ -280,12 +280,12 @@ class SubTask(models.Model):
     class Meta:
         db_table = 'subtasks'
 
-    maintask = models.ForeignKey(MainTask, related_name='maintask', on_delete=models.CASCADE, null=True)
+    maintask = models.ForeignKey(MainTask, related_name='maintask', on_delete=models.CASCADE, null=True, db_constraint=False)
     connected_workers = models.ManyToManyField(User, related_name='workers_sub', blank=True)
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
-    executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True)
+    executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
     location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
@@ -305,7 +305,7 @@ class ImageMain(models.Model):
     class Meta:
         db_table = 'imagemain'
     
-    task = models.ForeignKey(MainTask, related_name='maintask_img', on_delete=models.CASCADE, null=True)
+    task = models.ForeignKey(MainTask, related_name='maintask_img', on_delete=models.CASCADE, null=True, db_constraint=False)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_main, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
@@ -320,7 +320,7 @@ class ImageSubTask(models.Model):
     class Meta:
         db_table = 'subimage'
 
-    subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True)
+    subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True, db_constraint=False)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -335,8 +335,8 @@ class MainTaskComment(models.Model):
     class Meta:
         db_table = 'maintask_comment'
     
-    task = models.ForeignKey(MainTask, related_name='maintask_comment', on_delete=models.CASCADE, null=True)
-    creator_comment = models.ForeignKey(User, related_name='creator_maincomment', on_delete=models.DO_NOTHING, null=True)
+    task = models.ForeignKey(MainTask, related_name='maintask_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
+    creator_comment = models.ForeignKey(User, related_name='creator_maincomment', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     comment = models.TextField(_('Комментарий'), max_length=100, default="")
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
@@ -351,7 +351,7 @@ class ImageMainTaskComment(models.Model):
     class Meta:
         db_table = 'mainimage_comment'
 
-    comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True)
+    comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -367,7 +367,7 @@ class FileMainTaskComment(models.Model):
         db_table = 'files_maintask_comment'
 
     name_file = models.CharField(max_length = 50)
-    comment_maintask = models.ForeignKey(MainTaskComment, related_name='files_maintask_comment', on_delete=models.CASCADE, null=True)
+    comment_maintask = models.ForeignKey(MainTaskComment, related_name='files_maintask_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
     file = models.FileField(upload_to = upload_path_files_maintask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -382,8 +382,8 @@ class SubTaskComment(models.Model):
     class Meta:
         db_table = 'subtask_comment'
     
-    subtask = models.ForeignKey(SubTask, related_name='subtask_comment', on_delete=models.CASCADE, null=True)
-    creator_comment = models.ForeignKey(User, related_name='creator_subcomment', on_delete=models.DO_NOTHING, null=True)
+    subtask = models.ForeignKey(SubTask, related_name='subtask_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
+    creator_comment = models.ForeignKey(User, related_name='creator_subcomment', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     comment = models.TextField(_('Комментарий'), max_length=100, default="")
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
@@ -398,7 +398,7 @@ class ImageSubTaskComment(models.Model):
     class Meta:
         db_table = 'subimage_comment'
 
-    comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True)
+    comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
     image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -414,7 +414,7 @@ class FileSubTaskComment(models.Model):
         db_table = 'files_subtask_comment'
 
     name_file = models.CharField(max_length = 50)
-    comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True)
+    comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
     file = models.FileField(upload_to = upload_path_files_subtask_comment)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
@@ -449,7 +449,7 @@ class PushNotificationUser(models.Model):
     class Meta:
         db_table = 'push_notifications_user'
 
-    user = models.ForeignKey(User, related_name='user_push', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, related_name='user_push', on_delete=models.CASCADE, null=True, db_constraint=False)
     title = models.CharField(_('Заголовок'), max_length=200, default="")
     body = models.CharField(_('Сообщение'), max_length=400, default="")
     data = models.CharField(_('Данные'), max_length=600, default="")
@@ -466,7 +466,7 @@ class UploadFileMainTask(models.Model):
     class Meta:
         db_table = 'maintask_files'
 
-    task = models.ForeignKey(MainTask, related_name='maintask_file', on_delete=models.CASCADE, null=True)
+    task = models.ForeignKey(MainTask, related_name='maintask_file', on_delete=models.CASCADE, null=True, db_constraint=False)
     name_file = models.CharField(max_length = 50)
     file = models.FileField(upload_to = upload_path_files_maintask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -482,7 +482,7 @@ class UploadFileSubTask(models.Model):
     class Meta:
         db_table = 'subtask_files'
 
-    subtask = models.ForeignKey(SubTask, related_name='subtask_file', on_delete=models.CASCADE, null=True)
+    subtask = models.ForeignKey(SubTask, related_name='subtask_file', on_delete=models.CASCADE, null=True, db_constraint=False)
     name_file = models.CharField(max_length = 50)
     file = models.FileField(upload_to = upload_path_files_subtask)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
@@ -498,7 +498,7 @@ class UploadFileObject(models.Model):
     class Meta:
         db_table = 'object_files'
 
-    object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True)
+    object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True, db_constraint=False)
     name_file = models.CharField(max_length = 50)
     file = models.FileField(upload_to = upload_path_files_to_object)
     datetime = models.DateTimeField(auto_now_add=timezone.now)

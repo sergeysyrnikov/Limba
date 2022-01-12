@@ -210,18 +210,43 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = '__all__'
 
+class SubTaskCustomSerializer(serializers.ModelSerializer):
+    """Class SubTask Serializer"""
 
-class MainTaskSerializer(serializers.ModelSerializer):
-    """Class MainTask Serializer"""
-
-    creator_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-    connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
-    maintask_img = ImageMainSerializer(many = True, read_only=True)
+    # connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
+    # subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+    col_imgs = serializers.SerializerMethodField('number_imgs')
+    col_comments = serializers.SerializerMethodField('number_comments')
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
+    def number_imgs(self, obj):
+        number = 0
+        objs = ImageSubTask.objects.filter(subtask=obj.id)
+        number += len(objs)
+        objs_comments = SubTaskComment.objects.filter(subtask=obj.id)
+        for obj_msg in objs_comments:
+            number += len(ImageSubTaskComment.objects.filter(comment_subtask=obj_msg.id)) 
+        return number
+    
+    def number_comments(self, obj):
+        objs = SubTaskComment.objects.filter(subtask=obj.id)
+        return len(objs)
+
     class Meta:
-        model = MainTask
+        model = SubTask
+        fields = ['id', 'datetime', 'task_name', 'col_imgs', 'col_comments', 'is_show_executor',
+        'executor_task', 'is_active']
+
+class SubTaskCommentSerializer(serializers.ModelSerializer):
+    """Class SubTaskComment Serializer"""
+
+    creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    subimage_comment = ImageSubTaskCommentSerializer(many = True, read_only=True)
+
+    class Meta:
+        model = SubTaskComment
         fields = '__all__'
 
 class SubTaskSerializer(serializers.ModelSerializer):
@@ -230,11 +255,42 @@ class SubTaskSerializer(serializers.ModelSerializer):
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
+    subtask_comment = SubTaskCommentSerializer(many = True, read_only=True)
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
         model = SubTask
         fields = '__all__'
+
+class MainTaskCustomSerializer(serializers.ModelSerializer):
+    """Class MainTask Serializer"""
+
+    creator_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
+    # maintask_img = ImageMainSerializer(many = True, read_only=True)
+    maintask = SubTaskCustomSerializer(many = True, read_only=True)
+    col_imgs = serializers.SerializerMethodField('number_imgs')
+    col_comments = serializers.SerializerMethodField('number_comments')
+    datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+
+    def number_imgs(self, obj):
+        number = 0
+        objs = ImageMain.objects.filter(task=obj.id)
+        number += len(objs)
+        objs_comments = MainTaskComment.objects.filter(task=obj.id)
+        for obj_msg in objs_comments:
+            number += len(ImageMainTaskComment.objects.filter(comment_maintask=obj_msg.id)) 
+        return number
+    
+    def number_comments(self, obj):
+        objs = MainTaskComment.objects.filter(task=obj.id)
+        return len(objs)
+
+    class Meta:
+        model = MainTask
+        fields = ['id', 'subdepartment_object', 'maintask', 'connected_workers', 'executor_task', 'creator_task',
+        'task_name', 'col_imgs', 'col_comments', 'datetime', 'is_active', 'is_show_executor']
 
 class MainTaskCommentSerializer(serializers.ModelSerializer):
     """Class MainTaskComment Serializer"""
@@ -246,14 +302,19 @@ class MainTaskCommentSerializer(serializers.ModelSerializer):
         model = MainTaskComment
         fields = '__all__'
 
-class SubTaskCommentSerializer(serializers.ModelSerializer):
-    """Class SubTaskComment Serializer"""
+class MainTaskSerializer(serializers.ModelSerializer):
+    """Class MainTask Serializer"""
 
-    creator_comment = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
-    subimage_comment = ImageSubTaskCommentSerializer(many = True, read_only=True)
+    creator_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
+    maintask_img = ImageMainSerializer(many = True, read_only=True)
+    maintask_comment = MainTaskCommentSerializer(many = True, read_only=True)
+    # maintask = SubTaskCustomSerializer(many = True, read_only=True)
+    # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     class Meta:
-        model = SubTaskComment
+        model = MainTask
         fields = '__all__'
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

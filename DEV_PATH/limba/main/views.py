@@ -75,7 +75,9 @@ from .service import (
 )
 
 from .serializers import (
+    MainTaskCustomSerializer,
     PushNotificationUserSerializer,
+    SubTaskCustomSerializer,
     UserSerializer,
     ObjectSerializer,
     ImageObjectSerializer,
@@ -195,6 +197,15 @@ class MainTaskView(ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_class = TaskFilter
     permission_classes = (IsAuthenticated,)
+
+class MainTaskCustomView(ModelViewSet):
+    """Class MainTaskCustomView"""
+
+    queryset = MainTask.objects.all()
+    serializer_class = MainTaskCustomSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = TaskFilter
+    permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationMainTasks
 
 class SubTaskView(ModelViewSet):
@@ -202,6 +213,16 @@ class SubTaskView(ModelViewSet):
 
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = SubTaskFilter
+    permission_classes = (IsAuthenticated,)
+    # pagination_class = PaginationSubTasks
+
+class SubTaskCustomView(ModelViewSet):
+    """Class SubTaskCustomView"""
+
+    queryset = SubTask.objects.all()
+    serializer_class = SubTaskCustomSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = SubTaskFilter
     permission_classes = (IsAuthenticated,)
@@ -512,13 +533,13 @@ def number_task_new(request):
                             print("Id " + str(el))
                             try:
                                 subdep_obj = SubDepartmentObject.objects.get(id=el)
-                                objs_task = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj)
-                                objs_subtasks = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj)
-                                objs_task_new = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj, is_show_executor=False)
+                                objs_task = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj.id)
+                                objs_subtasks = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=str(subdep_obj.id))
+                                objs_task_new = MainTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj.id, is_show_executor=False)
                                 if len(objs_task_new) > 0:
                                     new_tasks[k].append(True)
                                 else:
-                                    objs_subtask_new = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=subdep_obj, is_show_executor=False)
+                                    objs_subtask_new = SubTask.objects.filter(executor_task=user_id, is_active = True, subdepartment_object=str(subdep_obj.id), is_show_executor=False)
                                     if len(objs_subtask_new) > 0:
                                         new_tasks[k].append(True)
                                     else:
