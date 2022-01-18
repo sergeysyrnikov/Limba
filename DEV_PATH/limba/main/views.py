@@ -23,6 +23,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import render
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import (
+    Log,
     PushNotificationUser,
     SubTaskComment, 
     SubTask, 
@@ -75,6 +76,7 @@ from .service import (
 )
 
 from .serializers import (
+    LogSerializer,
     MainTaskCustomSerializer,
     PushNotificationUserSerializer,
     SubTaskCustomSerializer,
@@ -366,6 +368,15 @@ class UploadFileObjectView(ModelViewSet):
     serializer_class = UploadFileObjectSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = ObjectFileFilter
+    permission_classes = (IsAuthenticated,)
+
+class LogView(ModelViewSet):
+    """Class LogView"""
+
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+    # filter_backends = (DjangoFilterBackend, )
+    # filter_class = ObjectFileFilter
     permission_classes = (IsAuthenticated,)
 
 # class UploadFileMaintaskCommentView(ModelViewSet):

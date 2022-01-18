@@ -9,6 +9,7 @@ from rest_framework import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from urllib.parse import unquote
 from .models import (
+    Log,
     SubTaskComment, 
     SubTask, 
     Department, 
@@ -214,6 +215,7 @@ class SubTaskCustomSerializer(serializers.ModelSerializer):
     """Class SubTask Serializer"""
 
     executor_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
+    # creator_task = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     # connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     # subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
     datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
@@ -415,3 +417,10 @@ class FileSubTaskCommentSerializer(serializers.ModelSerializer):
             'comment_subtask': instance.comment_subtask.id,
             'datetime': instance.datetime.strftime("%H:%M:%S %d.%m.%Y")
         }
+
+class LogSerializer(serializers.ModelSerializer):
+    """Class Log Serializer"""
+
+    class Meta:
+        model = Log
+        fields = '__all__'

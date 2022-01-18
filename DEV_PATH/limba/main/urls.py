@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
+    LogView,
     MainTaskCommentView,
     MainTaskView, 
     SubTaskCommentView,
@@ -57,6 +58,7 @@ router.register('push-notifications-user', PushNotificationUserView)
 # router.register('maintask-files', UploadFileMainTaskView)
 # router.register('subtask-files', UploadFileSubTaskView)
 router.register('object-files', UploadFileObjectView)
+router.register('logs', LogView)
 # router.register('maintask-comment-files', UploadFileMaintaskCommentView)
 # router.register('subtask-comment-files', UploadFileSubtaskCommentView)
 

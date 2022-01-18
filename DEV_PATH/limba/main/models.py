@@ -33,8 +33,10 @@ def path_folder(path_abs):
 
 def _delete_file(path):
    """ Deletes file from filesystem. """
+   print("Path file: " + str(path))
    if os.path.isfile(path):
        os.remove(path)
+       return True
    path_f = path_folder(path)
    lst = glob.glob(join(path_f,'*.jpg'))
    if (len(lst) == 0):
@@ -153,6 +155,7 @@ class UserAdditionalInfo(models.Model):
         ("4", 'Прораб'),
         ("5", 'Монтажник'),
         ("6", 'Инженер'),
+        ("7", 'Выберите должность'),
     )
 
     class Meta:
@@ -160,8 +163,8 @@ class UserAdditionalInfo(models.Model):
 
     user = models.ForeignKey(User, related_name='user_info', on_delete=models.CASCADE, null=True, db_constraint=False)
     abbreviation = models.CharField(_('Аббревиатура ФИО'), max_length=3, blank=False, default="")
-    position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=6)
-    type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=2)
+    position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=7)
+    type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=3)
     type_system = models.CharField(_('Тип устройства'), default="", max_length=1)
     code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="")
     bearer_token = models.CharField(_('Токен авторизации'), max_length=300, default="")
@@ -181,7 +184,7 @@ class Object(models.Model):
 
     user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, unique=True, null=True) 
-    shortname = models.CharField(_('Сокращённое имя объекта'), max_length=8, default='', unique=True) 
+    shortname = models.CharField(_('Сокращённое имя объекта'), max_length=15, default='', unique=True) 
     fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='', blank=True)
     supervisor = models.CharField(_('Руководитель проекта'), max_length=30, default='', blank=True)
     chief = models.CharField(_('Начальник участка'), max_length=30, default='', blank=True)
@@ -204,7 +207,7 @@ class ImageObject(models.Model):
         db_table = 'objectimage'
 
     object = models.ForeignKey(Object, related_name='object_img', on_delete=models.CASCADE, null=True, db_constraint=False)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_object, blank=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_object, blank=True, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -306,7 +309,7 @@ class ImageMain(models.Model):
         db_table = 'imagemain'
     
     task = models.ForeignKey(MainTask, related_name='maintask_img', on_delete=models.CASCADE, null=True, db_constraint=False)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_main, blank=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_main, blank=True, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
     
     def __str__(self):
@@ -321,7 +324,7 @@ class ImageSubTask(models.Model):
         db_table = 'subimage'
 
     subtask = models.ForeignKey(SubTask, related_name='subtask_img', on_delete=models.CASCADE, null=True, db_constraint=False)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub, blank=True, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -352,7 +355,7 @@ class ImageMainTaskComment(models.Model):
         db_table = 'mainimage_comment'
 
     comment_maintask = models.ForeignKey(MainTaskComment, related_name='mainimage_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_main_comment, blank=True, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -399,7 +402,7 @@ class ImageSubTaskComment(models.Model):
         db_table = 'subimage_comment'
 
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='subimage_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
-    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True)
+    image = models.ImageField(_('Фотография'), upload_to = upload_path_sub_comment, blank=True, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -415,7 +418,7 @@ class FileSubTaskComment(models.Model):
 
     name_file = models.CharField(max_length = 50)
     comment_subtask = models.ForeignKey(SubTaskComment, related_name='files_subtask_comment', on_delete=models.CASCADE, null=True, db_constraint=False)
-    file = models.FileField(upload_to = upload_path_files_subtask_comment)
+    file = models.FileField(upload_to = upload_path_files_subtask_comment, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -500,11 +503,26 @@ class UploadFileObject(models.Model):
 
     object = models.ForeignKey(Object, related_name='object_file', on_delete=models.CASCADE, null=True, db_constraint=False)
     name_file = models.CharField(max_length = 50)
-    file = models.FileField(upload_to = upload_path_files_to_object)
+    file = models.FileField(upload_to = upload_path_files_to_object, max_length=300)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
         return f"Id: {self.id}, Name file: {self.name_file}"
+
+"""Logs model Limba"""
+
+class Log(models.Model):
+    """Class Log"""
+
+    class Meta:
+        db_table = 'logs'
+    
+    type_log = models.DecimalField(_('Тип данных'), max_digits=2, decimal_places=0, default=99)
+    text = models.TextField(_('Данные'), max_length=250, default="")
+    datetime = models.DateTimeField(auto_now_add=timezone.now)
+    
+    def __str__(self):
+        return f"Тип: {self.type_log}, Дата создания: {self.datetime}."
 
 @receiver(models.signals.post_delete, sender=ImageObject)
 def post_delete_image_object(sender, instance, *args, **kwargs):
