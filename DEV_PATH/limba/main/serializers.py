@@ -281,6 +281,10 @@ class MainTaskCustomSerializer(serializers.ModelSerializer):
     col_imgs = serializers.SerializerMethodField('number_imgs')
     col_comments = serializers.SerializerMethodField('number_comments')
     datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+    creator_id = serializers.SerializerMethodField(method_name='id_creator')
+
+    def id_creator(self, obj):
+        return int(obj.creator_task.id)
 
     def number_imgs(self, obj):
         number = 0
@@ -294,11 +298,13 @@ class MainTaskCustomSerializer(serializers.ModelSerializer):
     def number_comments(self, obj):
         objs = MainTaskComment.objects.filter(task=obj.id)
         return len(objs)
+    
+
 
     class Meta:
         model = MainTask
         fields = ['id', 'subdepartment_object', 'maintask', 'connected_workers', 'executor_task', 'creator_task',
-        'task_name', 'col_imgs', 'col_comments', 'datetime', 'is_active', 'is_show_executor']
+        'task_name', 'col_imgs', 'col_comments', 'datetime', 'is_active', 'is_show_executor', 'creator_id']
 
 class MainTaskCommentSerializer(serializers.ModelSerializer):
     """Class MainTaskComment Serializer"""
