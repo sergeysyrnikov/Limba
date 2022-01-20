@@ -206,10 +206,16 @@ class DepartmentSerializer(serializers.ModelSerializer):
     user_assign = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     creator = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all())
     department = SubDepartmentObjectSerializer(many = True, read_only=True)
+    user_assign_id = serializers.SerializerMethodField('user_assign_met')
+
+    def user_assign_met(self, obj):
+        return int(obj.user_assign.id)
+
 
     class Meta:
         model = Department
-        fields = '__all__'
+        fields = ['id', 'user_assign', 'creator', 'department', 'fullname',
+            'datetime', 'object_name', 'user_assign_id']
 
 class SubTaskCustomSerializer(serializers.ModelSerializer):
     """Class SubTask Serializer"""
@@ -312,8 +318,13 @@ class MainTaskSerializer(serializers.ModelSerializer):
     connected_workers = serializers.SlugRelatedField(slug_field=User.USERNAME_FIELD, queryset = User.objects.all(), many=True)
     maintask_img = ImageMainSerializer(many = True, read_only=True)
     maintask_comment = MainTaskCommentSerializer(many = True, read_only=True)
+    creator_id = serializers.SerializerMethodField(method_name='id_creator')
     # maintask = SubTaskCustomSerializer(many = True, read_only=True)
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+
+    def id_creator(self, obj):
+        return int(obj.creator_task.id)
+
 
     class Meta:
         model = MainTask
