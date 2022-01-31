@@ -431,6 +431,7 @@ class PushNotification(models.Model):
   
     class Meta:
         db_table = 'push_notifications'
+        ordering = ['-datetime']
 
     title = models.CharField(_('Заголовок'), max_length=200, default="")
     body = models.CharField(_('Сообщение'), max_length=400, default="")
@@ -451,12 +452,25 @@ class PushNotificationUser(models.Model):
   
     class Meta:
         db_table = 'push_notifications_user'
+        ordering = ['-datetime']
 
     user = models.ForeignKey(User, related_name='user_push', on_delete=models.CASCADE, null=True, db_constraint=False)
-    title = models.CharField(_('Заголовок'), max_length=200, default="")
-    body = models.CharField(_('Сообщение'), max_length=400, default="")
-    data = models.CharField(_('Данные'), max_length=600, default="")
+    title = models.CharField(_('Заголовок'), max_length=200, default="", blank=True)
+    body = models.CharField(_('Сообщение'), max_length=400, default="", blank=True)
+    data = models.CharField(_('Данные'), max_length=600, default="", blank=True)
+    url_files = models.TextField(_('Файлы'), max_length=2000, default="", blank=True)
+    user_fio = models.CharField(_('ФИО пользователя'), max_length=100, default="", blank=True)
+    event = models.PositiveIntegerField(_('Тип события'), null=True, default=999)
+    id_event = models.PositiveIntegerField(_('Id cобытия'), null=True, default=999999)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+    def save(self, *args, **kwargs):
+        if PushNotificationUser.objects.count() == 10000:
+            objs = PushNotificationUser.objects.all()
+            last = objs.last()
+            last.delete()
+
+        super(PushNotificationUser, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Id: {self.id}, Title: {self.title}"
@@ -516,10 +530,23 @@ class Log(models.Model):
 
     class Meta:
         db_table = 'logs'
+        ordering = ['-datetime']
     
-    type_log = models.DecimalField(_('Тип данных'), max_digits=2, decimal_places=0, default=99)
+    user = models.ForeignKey(User, related_name='user_log', on_delete=models.CASCADE, null=True, db_constraint=False)
+    type_log = models.DecimalField(_('Тип данных'), max_digits=3, decimal_places=0, default=999)
     text = models.TextField(_('Данные'), max_length=250, default="")
     datetime = models.DateTimeField(auto_now_add=timezone.now)
+
+
+    def save(self, *args, **kwargs):
+        if Log.objects.count() == 10000:
+            objs = Log.objects.all()
+            last = objs.last()
+            last.delete()
+            # for obj in objs:
+            #     obj.delete()
+
+        super(Log, self).save(*args, **kwargs)
     
     def __str__(self):
         return f"Тип: {self.type_log}, Дата создания: {self.datetime}."

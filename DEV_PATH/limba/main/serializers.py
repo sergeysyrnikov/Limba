@@ -8,6 +8,7 @@ import json
 from rest_framework import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from urllib.parse import unquote
+from django.utils import timezone
 from .models import (
     Log,
     SubTaskComment, 
@@ -265,6 +266,19 @@ class SubTaskSerializer(serializers.ModelSerializer):
     subtask_img = ImageSubTaskSerializer(many = True, read_only=True)
     subtask_comment = SubTaskCommentSerializer(many = True, read_only=True)
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
+    creator_id = serializers.SerializerMethodField(method_name='id_creator')
+    creator_name = serializers.SerializerMethodField(method_name='name_creator')
+    executor_id = serializers.SerializerMethodField(method_name='id_executor')
+
+
+    def id_executor(self, obj):
+        return int(obj.executor_task.id)
+    
+    def id_creator(self, obj):
+        return int(obj.maintask.creator_task.id)
+    
+    def name_creator(self, obj):
+        return str(obj.maintask.creator_task.username)
 
     class Meta:
         model = SubTask
@@ -325,12 +339,15 @@ class MainTaskSerializer(serializers.ModelSerializer):
     maintask_img = ImageMainSerializer(many = True, read_only=True)
     maintask_comment = MainTaskCommentSerializer(many = True, read_only=True)
     creator_id = serializers.SerializerMethodField(method_name='id_creator')
+    executor_id = serializers.SerializerMethodField(method_name='id_executor')
     # maintask = SubTaskCustomSerializer(many = True, read_only=True)
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     def id_creator(self, obj):
         return int(obj.creator_task.id)
 
+    def id_executor(self, obj):
+        return int(obj.executor_task.id)
 
     class Meta:
         model = MainTask
@@ -366,6 +383,13 @@ class PushNotificationSerializer(serializers.ModelSerializer):
 
 class PushNotificationUserSerializer(serializers.ModelSerializer):
     """Class PushNotificationUser Serializer"""
+
+    datetime_custom = serializers.SerializerMethodField('date_custom')
+    # datetime_custom = serializers.DateTimeField(format='%d %m %H:%M')
+
+    def date_custom(self, obj):
+        return str(timezone.localtime(obj.datetime).strftime(format='%d %m %H:%M'))
+        
 
     class Meta:
         model = PushNotificationUser

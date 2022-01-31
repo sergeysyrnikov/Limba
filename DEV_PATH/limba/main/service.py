@@ -55,3 +55,13 @@ class PaginationSubTaskComments(PageNumberPagination):
     page_size = 1000000
     max_page_size = 3000
 
+"""Pagination Logs"""
+class PaginationLog(PageNumberPagination):
+    page_size = 200
+    max_page_size = 200
+
+"""Pagination Lent"""
+class PaginationLent(PageNumberPagination):
+    page_size = 2000
+    max_page_size = 2000
+

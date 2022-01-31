@@ -72,7 +72,9 @@ from .service import (
     PaginationSubTaskImgs,
     PaginationMainTaskComments,
     PaginationSubTaskComments,
-    PaginationUsersInfo    
+    PaginationUsersInfo,
+    PaginationLog,
+    PaginationLent, 
 )
 
 from .serializers import (
@@ -298,6 +300,7 @@ class PushNotificationView(ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationFilter
     permission_classes = (IsAuthenticated,)
+    pagination_class = PaginationLog
 
     # @action(detail=True, methods=['post'])
     # def set_active(self, request, pk=None):
@@ -314,6 +317,7 @@ class PushNotificationUserView(ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_class = PushNotificationUserFilter
     permission_classes = (IsAuthenticated,)
+    pagination_class = PaginationLent
 
 class ChangePasswordView(generics.UpdateAPIView):
         """
@@ -378,6 +382,7 @@ class LogView(ModelViewSet):
     # filter_backends = (DjangoFilterBackend, )
     # filter_class = ObjectFileFilter
     permission_classes = (IsAuthenticated,)
+    pagination_class = PaginationLog
 
 # class UploadFileMaintaskCommentView(ModelViewSet):
 #     """Class UploadFileMaintaskCommentView"""
