@@ -139,6 +139,9 @@ def upload_path_files_subtask_comment(self, filename):
 class User(AbstractUser):
     """Class User"""
 
+    company = models.CharField(_('Компания'), max_length=100, default='')
+    is_admin_company = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.username}"
 

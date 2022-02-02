@@ -130,7 +130,7 @@ class UserSerializer(serializers.ModelSerializer):
             password = validate_data['password'],
             first_name = validate_data['first_name'],
             last_name = validate_data['last_name'],
-            email = validate_data['email'],
+            email = validate_data['email']
             # is_staff = validate_data['is_staff'],
             # is_superuser = validate_data['is_superuser'],
         )
@@ -146,6 +146,8 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name', 
             'last_name', 
             'email',
+            'company',
+            'is_admin_company',
             # 'is_staff', 
             # 'is_superuser', 
         ]
