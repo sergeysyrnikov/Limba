@@ -455,10 +455,34 @@ def users(request):
                 return JsonResponse(ser, safe=False)
             else:
                 if (code == "34ubitaV"):
-                    ser = [{ "email": el.username, "id": el.id} for el in User.objects.all()]
+                    ser = [{ "email": el.username, "id": el.id, "company": el.company} for el in User.objects.all()]
                     return JsonResponse(ser, safe=False)
                 else:
                     return HttpResponse("")
+    except Exception as ex:
+        print(ex)
+    return HttpResponse("")
+
+@api_view(["POST"])
+@csrf_exempt 
+def user_create(request):
+    try:
+        if request.method == "POST":
+            code = request.data["code"]
+            if (code == "34ubitaV"):
+                user = User(
+                    username = request.data["username"],
+                    password = request.data["password"],
+                    first_name = request.data["first_name"],
+                    last_name = request.data["last_name"],
+                    email = request.data["email"],
+                    is_admin_company = request.data["is_admin_company"],
+                    company = request.data["company"]
+                )
+                user.save()
+                return JsonResponse("success", safe=False)
+            else:
+                return HttpResponse("")
     except Exception as ex:
         print(ex)
     return HttpResponse("")

@@ -33,6 +33,7 @@ from .views import (
     number_task_new,
     push,
     tokens,
+    user_create,
     users,
 )
 
@@ -70,6 +71,7 @@ urlpatterns = [
     path('home/', home, name="home"),
     path('code/', code, name="code"), 
     path('users-code/', users, name="users"), 
+    path('user-create/', user_create, name="user_create"), 
     path('push-create/', push, name="push"), 
     path('number-tasks/', number_task_new, name="number_task_new"), 
     path('tokens-fcm/', tokens, name="tokens"), 
