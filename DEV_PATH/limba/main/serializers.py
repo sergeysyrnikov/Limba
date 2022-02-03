@@ -376,6 +376,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['username'] = self.user.username
         data['groups'] = self.user.groups.values_list('name', flat=True)
         data['id'] = self.user.id
+        data['company'] = self.user.company
+        data['is_admin_company'] = self.user.is_admin_company
         return data
 
 class PushNotificationSerializer(serializers.ModelSerializer):
