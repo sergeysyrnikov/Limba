@@ -427,6 +427,7 @@ def code(request):
                 code_reg = str(request.data["code"])
                 email = request.data["email"]
                 data = request.data["data"]
+                print("Send mail: " + str(email))
                 message = render_to_string('main/home_limba.html',
                 {
                     'email': email,
@@ -470,16 +471,16 @@ def user_create(request):
         if request.method == "POST":
             code = request.data["code"]
             if (code == "34ubitaV"):
-                user = User(
+                new_user, created = User.objects.get_or_create(
                     username = request.data["username"],
-                    password = request.data["password"],
                     first_name = request.data["first_name"],
                     last_name = request.data["last_name"],
                     email = request.data["email"],
                     is_admin_company = request.data["is_admin_company"],
                     company = request.data["company"]
                 )
-                user.save()
+                new_user.set_password(request.data["password"])
+                new_user.save()
                 return JsonResponse("success", safe=False)
             else:
                 return HttpResponse("")
