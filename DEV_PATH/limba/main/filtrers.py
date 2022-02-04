@@ -1,6 +1,7 @@
 from django.db.models import fields
 from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
 from .models import (
+    Log,
     Object,
     ImageObject, 
     Department, 
@@ -26,24 +27,26 @@ from .models import (
 class UserFilter(rest_filters.FilterSet):
     """Class UserFilter"""
 
-    id = NumberFilter(field_name="id")
-    user = NumberFilter(field_name="user")
+    id = NumberFilter(field_name='id')
+    user = NumberFilter(field_name='user')
+    company = CharFilter(lookup_expr='iexact')
 
     class Meta:
         model = UserAdditionalInfo
-        fields = ["id", "user"]
+        fields = ['id', 'user', 'company']
 
 class ObjectFilter(rest_filters.FilterSet):
     """Class ObjectFilter"""
 
-    id = NumberFilter(field_name="id")
-    code = NumberFilter(field_name="code")
-    user = NumberFilter(field_name="user")
-    connected_workers = NumberFilter(field_name="connected_workers")
+    id = NumberFilter(field_name='id')
+    code = NumberFilter(field_name='code')
+    user = NumberFilter(field_name='user')
+    company = CharFilter(lookup_expr='iexact')
+    connected_workers = NumberFilter(field_name='connected_workers')
 
     class Meta:
         model = Object
-        fields = ['id', 'code', 'user', "connected_workers"]
+        fields = ['id', 'code', 'user', 'company', 'connected_workers']
 
 class ObjectImageFilter(rest_filters.FilterSet):
     """Class ObjectImageFilter"""
@@ -234,12 +237,13 @@ class SubTaskCommentFileFilter(rest_filters.FilterSet):
 class PushNotificationFilter(rest_filters.FilterSet):
     """Class PushNotificationFilter"""
 
-    id = NumberFilter(field_name="id")
-    type = NumberFilter(field_name="type")
+    id = NumberFilter(field_name='id')
+    type = NumberFilter(field_name='type')
+    company = CharFilter(lookup_expr='iexact')
 
     class Meta:
         model = PushNotification
-        fields = ['id', 'type']
+        fields = ['id', 'type', 'company']
 
 class PushNotificationUserFilter(rest_filters.FilterSet):
     """Class PushNotificationUserFilter"""
@@ -250,3 +254,13 @@ class PushNotificationUserFilter(rest_filters.FilterSet):
     class Meta:
         model = PushNotificationUser
         fields = ['id', 'user']
+
+class LogFilter(rest_filters.FilterSet):
+    """Class LogFilter"""
+
+    id = NumberFilter(field_name="id")
+    company = CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Log
+        fields = ['id', 'company']

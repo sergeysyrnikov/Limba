@@ -184,18 +184,20 @@ class Object(models.Model):
     
     class Meta:
         db_table = 'objects'
+        unique_together = (('code', 'company'),('shortname', 'company'),)
 
     user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
-    code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, unique=True, null=True) 
-    shortname = models.CharField(_('Сокращённое имя объекта'), max_length=15, default='', unique=True) 
+    code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, null=True) 
+    shortname = models.CharField(_('Сокращённое имя объекта'), max_length=15, default='') 
     fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='', blank=True)
     supervisor = models.CharField(_('Руководитель проекта'), max_length=30, default='', blank=True)
     chief = models.CharField(_('Начальник участка'), max_length=30, default='', blank=True)
-    group_number = models.DecimalField(_('Номер проектной группы'), max_digits=5, decimal_places=0, unique=True, null=True) 
+    group_number = models.DecimalField(_('Номер проектной группы'), max_digits=5, decimal_places=0, null=True, blank=True) 
     date_finished = models.DateField(_('Дата сдачи объекта'), null=True, blank=True)
     date_start_document = models.DateField(_('Дата создания ТУ Электоснабжение'), null=True, blank=True)
     date_finished_document = models.DateField(_('Дата окончания ТУ Электоснабжение'), null=True, blank=True)
     connected_workers = models.ManyToManyField(User, related_name='workers_object', blank=True)
+    company = models.CharField(_('Компания'), max_length=50, default='', blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -443,6 +445,7 @@ class PushNotification(models.Model):
     is_active = models.BooleanField(default=True)
     token_fcm = models.CharField(_('Токен fcm'), max_length=300, default="", blank=True)
     type_system = models.CharField(_('Тип устройства'), default="", max_length=1)
+    company = models.CharField(_('Компания'), max_length=50, default='', blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
@@ -538,6 +541,7 @@ class Log(models.Model):
     user = models.ForeignKey(User, related_name='user_log', on_delete=models.CASCADE, null=True, db_constraint=False)
     type_log = models.DecimalField(_('Тип данных'), max_digits=3, decimal_places=0, default=999)
     text = models.TextField(_('Данные'), max_length=250, default="")
+    company = models.CharField(_('Компания'), max_length=50, default='', blank=True)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
 

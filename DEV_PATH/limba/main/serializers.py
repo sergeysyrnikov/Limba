@@ -130,7 +130,9 @@ class UserSerializer(serializers.ModelSerializer):
             password = validate_data['password'],
             first_name = validate_data['first_name'],
             last_name = validate_data['last_name'],
-            email = validate_data['email']
+            email = validate_data['email'],
+            is_admin_company = validate_data['is_admin_company'],
+            company = validate_data['company']
             # is_staff = validate_data['is_staff'],
             # is_superuser = validate_data['is_superuser'],
         )
@@ -151,6 +153,7 @@ class UserSerializer(serializers.ModelSerializer):
             # 'is_staff', 
             # 'is_superuser', 
         ]
+        
         # write_only_fields = ('password',)
 
 class UserInfoSerialiser(serializers.ModelSerializer):

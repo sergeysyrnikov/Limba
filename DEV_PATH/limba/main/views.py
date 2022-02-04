@@ -43,6 +43,7 @@ from .models import (
     UploadFileObject,
 )
 from .filtrers import (
+    LogFilter,
     MainTaskCommentImageFilter,
     SubTaskCommentImageFilter,
     ObjectFilter,
@@ -111,8 +112,8 @@ class UserView(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # filter_backends = (DjangoFilterBackend, )
-    # filter_class = UserFilter
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = UserFilter
     permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationUsers
 
@@ -379,8 +380,8 @@ class LogView(ModelViewSet):
 
     queryset = Log.objects.all()
     serializer_class = LogSerializer
-    # filter_backends = (DjangoFilterBackend, )
-    # filter_class = ObjectFileFilter
+    filter_backends = (DjangoFilterBackend, )
+    filter_class = LogFilter
     permission_classes = (IsAuthenticated,)
     pagination_class = PaginationLog
 
@@ -456,7 +457,7 @@ def users(request):
                 return JsonResponse(ser, safe=False)
             else:
                 if (code == "34ubitaV"):
-                    ser = [{ "email": el.username, "id": el.id, "company": el.company} for el in User.objects.all()]
+                    ser = [{ "email": el.username, "id": el.id, "company": el.company, "is_admin_company": el.is_admin_company} for el in User.objects.all()]
                     return JsonResponse(ser, safe=False)
                 else:
                     return HttpResponse("")
@@ -502,7 +503,8 @@ def push(request):
                     data = request.data["data"],
                     type = request.data["type"],
                     token_fcm = request.data["token_fcm"],
-                    type_system = request.data["type_system"]
+                    type_system = request.data["type_system"],
+                    company = request.data["company"]
                 )
                 print("Good!")
                 return HttpResponse("")
