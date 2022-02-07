@@ -234,7 +234,7 @@ class Department(models.Model):
         unique_together = ("object_name", "fullname")
 
     def __str__(self):
-        return f"{_('Имя отдела: ')}{self.fullname}, {_('Ответственный: ')}{self.user_assign}."
+        return f"{_('Имя отдела: ')}{self.fullname}."
 
 """SubDepartments model Limba"""
 
@@ -252,7 +252,8 @@ class SubDepartmentObject(models.Model):
         unique_together = ("department", "fullname")
 
     def __str__(self):
-        return f"{_('Название подотдела: ')}{self.fullname}, {_('Ответственный: ')}{self.user}."
+        # return f"{_('Название подотдела: ')}{self.fullname}, {_('Ответственный: ')}{self.creator}."
+        return f"{_('Название подотдела: ')}{self.fullname}."
 
 """Maintasks model Limba"""
 
@@ -263,13 +264,13 @@ class MainTask(models.Model):
         db_table = 'maintasks'
 
     subdepartment_object = models.ForeignKey(SubDepartmentObject, related_name='department_object', on_delete=models.CASCADE, null=True, db_constraint=False)
-    creator_task = models.ForeignKey(User, related_name='creator_task', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
+    creator_task = models.ForeignKey(User, related_name='creator_task', on_delete=models.DO_NOTHING, null=True, db_constraint=False, blank=True)
     cols_subtasks = models.IntegerField(_('Колличество подзадач'), null=True, default=0)
     connected_workers = models.ManyToManyField(User, related_name='workers_main', blank=True)
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
-    executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
+    executor_task = models.ForeignKey(User, related_name='executor_task', on_delete=models.DO_NOTHING, null=True, blank=True, db_constraint=False)
     about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
     location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
@@ -278,7 +279,7 @@ class MainTask(models.Model):
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
-        return f"Задача: {self.task_name}, Исполнитель: {self.executor_task}"
+        return f"Задача: {self.task_name}."
 
 """Subtasks model Limba"""
 
@@ -293,7 +294,7 @@ class SubTask(models.Model):
     task_name = models.CharField(_('Заголовок'), max_length=30)
     full_link = models.CharField(_('Путь до задачи'), max_length=150)
     date_finished = models.DateField(_('Дата окончания задачи'), null=True, blank=True)
-    executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
+    executor_task = models.ForeignKey(User, related_name='executor', on_delete=models.DO_NOTHING, null=True, blank=True, db_constraint=False)
     about = models.TextField(_('Подробности'), max_length=200, default="", blank=True)
     location = models.CharField(_('Местоположение'), max_length=100, default="", blank=True)
     is_active = models.BooleanField(default=True)
@@ -303,7 +304,7 @@ class SubTask(models.Model):
     datetime = models.DateTimeField(auto_now_add=timezone.now)
 
     def __str__(self):
-        return f"Подзадача: {self.task_name}, Исполнитель: {self.executor_task}"
+        return f"Подзадача: {self.task_name}."
 
 """MainImage model Limba"""
 

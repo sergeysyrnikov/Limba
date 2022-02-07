@@ -16,6 +16,7 @@ from .models import (
     ImageMainTaskComment,
     ImageSubTaskComment,
     PushNotification,
+    PushNotificationUser,
     UploadFileMainTask,
     UploadFileSubTask,
     UploadFileObject,
@@ -97,8 +98,8 @@ class SubDepartmentObject(admin.ModelAdmin):
 class ImageMain(admin.ModelAdmin):
     """Class ImageMain"""
 
-    list_display = [f.name for f in ImageMain._meta.fields]
-    list_filter = [f.name for f in ImageMain._meta.fields]
+    list_display = ['task', 'image', 'datetime']
+    list_filter = ['task', 'datetime']
 
 """Class ImageSubTask admin"""    
 
@@ -106,8 +107,8 @@ class ImageMain(admin.ModelAdmin):
 class ImageSubTask(admin.ModelAdmin):
     """Class ImageSubTask"""
 
-    list_display = [f.name for f in ImageSubTask._meta.fields]
-    list_filter = [f.name for f in ImageSubTask._meta.fields]
+    list_display = ['subtask', 'image', 'datetime']
+    list_filter = ['subtask', 'datetime']
 
 """Class ImageMainTaskComment admin"""    
 
@@ -116,7 +117,7 @@ class ImageMainTaskComment(admin.ModelAdmin):
     """Class ImageMainTaskComment"""
 
     list_display = [f.name for f in ImageMainTaskComment._meta.fields]
-    list_filter = [f.name for f in ImageMainTaskComment._meta.fields]
+    list_filter = ['datetime']
 
 """Class ImageSubTaskComment admin"""    
 
@@ -125,7 +126,7 @@ class ImageSubTaskComment(admin.ModelAdmin):
     """Class ImageSubTaskComment"""
 
     list_display = [f.name for f in ImageSubTaskComment._meta.fields]
-    list_filter = [f.name for f in ImageSubTaskComment._meta.fields]
+    list_filter = ['datetime']
 
 """Class MainTaskComment admin"""    
 
@@ -150,7 +151,14 @@ class PushNotification(admin.ModelAdmin):
     """Class PushNotification"""
 
     list_display = [f.name for f in PushNotification._meta.fields]
-    list_filter = [f.name for f in PushNotification._meta.fields]
+    list_filter = ['type', 'is_active', 'type_system', 'datetime']
+
+@admin.register(PushNotificationUser)
+class PushNotificationUser(admin.ModelAdmin):
+    """Class PushNotification"""
+
+    list_display = [f.name for f in PushNotificationUser._meta.fields]
+    list_filter = ['user', 'event', 'datetime']
 
 # @admin.register(FileSubTaskComment)
 # class FileSubTaskComment(admin.ModelAdmin):

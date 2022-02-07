@@ -60,6 +60,7 @@ from .filtrers import (
     PushNotificationFilter,
     PushNotificationUserFilter,
     ObjectFileFilter,
+    UserInfoFilter,
 )
 
 from .service import (
@@ -150,7 +151,7 @@ class UserInfoView(ModelViewSet):
     queryset = UserAdditionalInfo.objects.all()
     serializer_class = UserInfoSerialiser
     filter_backends = (DjangoFilterBackend, )
-    filter_class = UserFilter
+    filter_class = UserInfoFilter
     permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationUsersInfo
 

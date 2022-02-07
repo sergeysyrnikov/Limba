@@ -12,6 +12,7 @@ from .models import (
     SubTaskComment, 
     ImageMain, 
     ImageSubTask,
+    User,
     UserAdditionalInfo,
     ImageMainTaskComment,
     ImageSubTaskComment,
@@ -28,12 +29,21 @@ class UserFilter(rest_filters.FilterSet):
     """Class UserFilter"""
 
     id = NumberFilter(field_name='id')
-    user = NumberFilter(field_name='user')
     company = CharFilter(lookup_expr='iexact')
 
     class Meta:
+        model = User
+        fields = ['id', 'company']
+
+class UserInfoFilter(rest_filters.FilterSet):
+    """Class UserFilter"""
+
+    id = NumberFilter(field_name='id')
+    user = NumberFilter(field_name='user')
+
+    class Meta:
         model = UserAdditionalInfo
-        fields = ['id', 'user', 'company']
+        fields = ['id', 'user']
 
 class ObjectFilter(rest_filters.FilterSet):
     """Class ObjectFilter"""

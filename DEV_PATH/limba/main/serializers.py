@@ -153,7 +153,7 @@ class UserSerializer(serializers.ModelSerializer):
             # 'is_staff', 
             # 'is_superuser', 
         ]
-        
+
         # write_only_fields = ('password',)
 
 class UserInfoSerialiser(serializers.ModelSerializer):
@@ -215,7 +215,12 @@ class DepartmentSerializer(serializers.ModelSerializer):
     user_assign_id = serializers.SerializerMethodField('user_assign_met')
 
     def user_assign_met(self, obj):
-        return int(obj.user_assign.id)
+        try:
+            return int(obj.user_assign.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
+        
 
 
     class Meta:
@@ -277,13 +282,25 @@ class SubTaskSerializer(serializers.ModelSerializer):
 
 
     def id_executor(self, obj):
-        return int(obj.executor_task.id)
+        try:
+            return int(obj.executor_task.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
     
     def id_creator(self, obj):
-        return int(obj.maintask.creator_task.id)
+        try:
+            return int(obj.maintask.creator_task.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
     
     def name_creator(self, obj):
-        return str(obj.maintask.creator_task.username)
+        try:
+            return str(obj.maintask.creator_task.username)
+        except Exception as ex:
+            print(ex)
+        return ''
 
     class Meta:
         model = SubTask
@@ -303,7 +320,11 @@ class MainTaskCustomSerializer(serializers.ModelSerializer):
     creator_id = serializers.SerializerMethodField(method_name='id_creator')
 
     def id_creator(self, obj):
-        return int(obj.creator_task.id)
+        try:
+            return int(obj.creator_task.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
 
     def number_imgs(self, obj):
         number = 0
@@ -349,10 +370,18 @@ class MainTaskSerializer(serializers.ModelSerializer):
     # datetime = serializers.DateTimeField(format='%H:%M:%S %d.%m.%Y')
 
     def id_creator(self, obj):
-        return int(obj.creator_task.id)
+        try:
+            return int(obj.creator_task.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
 
     def id_executor(self, obj):
-        return int(obj.executor_task.id)
+        try:
+            return int(obj.executor_task.id)
+        except Exception as ex:
+            print(ex)
+        return 999999
 
     class Meta:
         model = MainTask
