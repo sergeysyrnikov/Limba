@@ -123,6 +123,11 @@ class ImageSubTaskCommentSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(write_only=True)
+    id_user_info = serializers.SerializerMethodField(method_name="get_id_user_info")
+
+    def get_id_user_info(self, obj):
+        obj_new = UserAdditionalInfo.objects.get(user=obj.id)
+        return obj_new.id
 
     def create(self, validate_data):
         user = UserModel.objects.create_user(
@@ -150,6 +155,7 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'company',
             'is_admin_company',
+            'id_user_info',
             # 'is_staff', 
             # 'is_superuser', 
         ]

@@ -169,7 +169,7 @@ class UserAdditionalInfo(models.Model):
     position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=7)
     type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=3)
     type_system = models.CharField(_('Тип устройства'), default="", max_length=1)
-    code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="")
+    code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="", blank=True)
     bearer_token = models.CharField(_('Токен авторизации'), max_length=300, default="")
     index_color = models.DecimalField(_('Цвет иконки пользователя'), max_digits=1 ,decimal_places=0 ,default=0)
     datetime = models.DateTimeField(auto_now_add=timezone.now)
