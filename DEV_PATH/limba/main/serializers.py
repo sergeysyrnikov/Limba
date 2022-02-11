@@ -126,8 +126,12 @@ class UserSerializer(serializers.ModelSerializer):
     id_user_info = serializers.SerializerMethodField(method_name="get_id_user_info")
 
     def get_id_user_info(self, obj):
-        obj_new = UserAdditionalInfo.objects.get(user=obj.id)
-        return obj_new.id
+        try:
+            obj_new = UserAdditionalInfo.objects.get(user=obj.id)
+            return obj_new.id
+        except Exception as ex:
+            print(ex)
+            return 999999
 
     def create(self, validate_data):
         user = UserModel.objects.create_user(

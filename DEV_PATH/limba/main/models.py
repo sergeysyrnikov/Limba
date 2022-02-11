@@ -188,6 +188,7 @@ class Object(models.Model):
 
     user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
     code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, null=True) 
+    is_private = models.BooleanField(_('Приватность объекта'), default=False, null=True)
     shortname = models.CharField(_('Сокращённое имя объекта'), max_length=15, default='') 
     fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='', blank=True)
     supervisor = models.CharField(_('Руководитель проекта'), max_length=30, default='', blank=True)

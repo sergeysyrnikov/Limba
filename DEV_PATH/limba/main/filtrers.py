@@ -1,5 +1,5 @@
 from django.db.models import fields
-from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
+from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter, BooleanFilter
 from .models import (
     Log,
     Object,
@@ -53,10 +53,11 @@ class ObjectFilter(rest_filters.FilterSet):
     user = NumberFilter(field_name='user')
     company = CharFilter(lookup_expr='iexact')
     connected_workers = NumberFilter(field_name='connected_workers')
+    is_private = BooleanFilter(field_name='is_private')
 
     class Meta:
         model = Object
-        fields = ['id', 'code', 'user', 'company', 'connected_workers']
+        fields = ['id', 'code', 'user', 'company', 'connected_workers', 'is_private']
 
 class ObjectImageFilter(rest_filters.FilterSet):
     """Class ObjectImageFilter"""
