@@ -4,7 +4,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     LogView,
     MainTaskCommentView,
-    MainTaskView, 
+    MainTaskView,
+    ObjectCustomView, 
     SubTaskCommentView,
     SubTaskCustomView, 
     UserView, 
@@ -41,6 +42,7 @@ router = routers.DefaultRouter()
 router.register('users', UserView)
 router.register('users-info', UserInfoView)
 router.register('objects', ObjectView)
+# router.register('objects-custom', ObjectCustomView)
 router.register('object-images', ImageObjectView)
 router.register('departments', DepartmentView)
 router.register('subdepartments', SubDepartmentObjectView)
@@ -75,5 +77,6 @@ urlpatterns = [
     path('push-create/', push, name="push"), 
     path('number-tasks/', number_task_new, name="number_task_new"), 
     path('tokens-fcm/', tokens, name="tokens"), 
+    path('objects-custom/', ObjectCustomView.as_view()), 
     path('', include(router.urls))
 ]

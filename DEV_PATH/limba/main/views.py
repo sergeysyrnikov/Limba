@@ -21,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 # from rest_framework.decorators import action
 from django.shortcuts import render
+from itertools import chain
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import (
     Log,
@@ -164,6 +165,24 @@ class ObjectView(ModelViewSet):
     filter_class = ObjectFilter
     permission_classes = (IsAuthenticated,)
     # pagination_class = PaginationObjects
+
+class ObjectCustomView(generics.ListAPIView):
+    """Class ObjectView"""
+
+    serializer_class = ObjectSerializer
+    # filter_backends = (DjangoFilterBackend, )
+    # filter_class = ObjectFilter
+    permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        user = self.request.GET.get('user')
+        company = self.request.GET.get('company')
+        obj_first = Object.objects.filter(connected_workers=user, is_private=True, company=company)
+        obj_add = Object.objects.filter(is_private=False, company=company)
+        print(len(obj_first))
+        print(len(obj_add))
+        obj_all = list(chain(obj_first, obj_add));
+        return obj_all
 
 class ImageObjectView(ModelViewSet):
     """Class ImageObjectView"""

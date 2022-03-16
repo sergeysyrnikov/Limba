@@ -152,13 +152,15 @@ class UserAdditionalInfo(models.Model):
 
     positions = (
         ("0", 'Администратор'),
-        ("1", 'Руководитель проектов'),
-        ("2", 'Начальник отдела'),
-        ("3", 'Начальник участка'),
-        ("4", 'Прораб'),
-        ("5", 'Монтажник'),
-        ("6", 'Инженер'),
-        ("7", 'Выберите должность'),
+        ("1", 'Генеральный директор'),
+        ("2", 'Зам генерального директора'),
+        ("3", 'Руководитель проектов'),
+        ("4", 'Начальник отдела'),
+        ("5", 'Начальник участка'),
+        ("6", 'Прораб'),
+        ("7", 'Монтажник'),
+        ("8", 'Инженер'),
+        ("9", 'Выберите должность'),
     )
 
     class Meta:
@@ -166,7 +168,7 @@ class UserAdditionalInfo(models.Model):
 
     user = models.ForeignKey(User, related_name='user_info', on_delete=models.CASCADE, null=True, db_constraint=False)
     abbreviation = models.CharField(_('Аббревиатура ФИО'), max_length=3, blank=False, default="")
-    position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=7)
+    position_worker = models.CharField(_('Должность работника'), max_length=1, choices=positions, default=9)
     type_user = models.DecimalField(_('Тип пользователя'), max_digits=1 ,decimal_places=0 ,default=3)
     type_system = models.CharField(_('Тип устройства'), default="", max_length=1)
     code_fcm = models.CharField(_('Токен пользователя'), max_length=300, default="", blank=True)
@@ -187,7 +189,7 @@ class Object(models.Model):
         unique_together = (('code', 'company'),('shortname', 'company'),)
 
     user = models.ForeignKey(User, related_name='user_limba', on_delete=models.DO_NOTHING, null=True, db_constraint=False)
-    code = models.DecimalField(_('Код объекта'), max_digits=3, decimal_places=0, null=True) 
+    code = models.DecimalField(_('Код объекта'), max_digits=4, decimal_places=0, null=True, blank=True) 
     is_private = models.BooleanField(_('Приватность объекта'), default=False, null=True)
     shortname = models.CharField(_('Сокращённое имя объекта'), max_length=15, default='') 
     fullname = models.CharField(_('Полное имя объекта'), max_length=25, default='', blank=True)
